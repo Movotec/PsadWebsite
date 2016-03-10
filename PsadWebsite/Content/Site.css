@@ -24,6 +24,12 @@ rgba(242,242,242,1)
 
 */
 
+
+.nav > li > a, .navbar-brand
+{
+    padding: 20px 15px;
+}
+
 *:hover, *:focus
 {
     -webkit-transition: all 0.2s ease;
@@ -35,9 +41,8 @@ rgba(242,242,242,1)
 
 /* Move down content because we have a fixed navbar that is 50px tall */
 body {
-    padding-top: 50px;
-    padding-bottom: 20px;
-
+    padding-top: 75px;
+    /*padding-bottom: 20px;*/
     font-size:1.6em;
 }
 
@@ -46,6 +51,7 @@ body {
 .body-content {
     padding-left: 15px;
     padding-right: 15px;
+    position:relative;
 }
 
 /* Override the default bootstrap behavior where horizontal description lists 
@@ -82,7 +88,7 @@ a
     background:#0f4c64;
     /* rgb(15,76,100) */
 }
-.movo-bg-grey 
+.movo-bg-grey, body
 {
     background:#4f5358;
     /* rgb(79,83,88) */
@@ -129,7 +135,13 @@ h1,h2,h3,h4, .jumbotron h1, .jumbotron h2, .jumbotron h3, .jumbotron h4
 }
 footer
 {
-    box-shadow: rgba(0,0,0,0.5) 0 5px 5px 5px;
+    border-radius:10px;
+    height:150px;
+    padding:25px;
+    margin:50px 0;
+     
+    box-shadow: inset rgba(0,0,0,0.5) 0 4px 5px 2px;
+
 }
 .navbar-fixed-top, .navbar-toggle, .btn-primary, /*.navbar-nav*/ .input-group *
 {
@@ -137,10 +149,11 @@ footer
 }
 .navbar-nav .input-group
 {
-    padding-top: 8px;
+    padding-top: 14px;
     padding-bottom: 8px;
+    
 }
-.btn
+.input-group .btn
 {
     height:34px;
 }
@@ -199,19 +212,20 @@ input[type="radio"]:focus,
     outline: 0 none;
 }
 
-footer, html, body
+html, body, form
 {
     height:100%;
-}
-footer
-{
-    
 
 }
+
 hr
 {
 
     border:2px solid #f67828;
+}
+form
+{
+    position:relative;
 }
 
 

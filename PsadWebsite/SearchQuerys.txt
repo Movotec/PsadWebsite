@@ -1,0 +1,16 @@
+﻿sort patient by:
+age
+gender
+weight
+heigth
+location
+diagnostic (ailment)
+foot/shoe size
+
+sort measurements by:
+time
+length 1, 2 and fibula (for joint/hinge calculations)
+
+count values:
+directly
+in range (x -> y)

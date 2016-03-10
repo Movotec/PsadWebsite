@@ -20,7 +20,7 @@
     <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
 
 </head>
-<body class="movo-bg-grey">
+<body>
     <form runat="server">
         <asp:ScriptManager runat="server">
             <Scripts>
@@ -94,27 +94,30 @@
                 </div>
             </div>
         </div>
+
         <div class="container body-content">
             <asp:ContentPlaceHolder ID="MainContent" runat="server">
             </asp:ContentPlaceHolder>
             
-        </div>
-        <footer><!-- clasee="contrainer-fluid" --> 
-            <hr />
-            <div class="container">
+            <footer><!-- clasee="contrainer-fluid" --> 
+<%--                <hr />--%>
+                <div class="container">
 
-                <div class="row">
-                    <div class="col-lg-3">
-                        <img class="movo-logo-frame movo-bg-white" src="Media/Images/MovotecLogo.png" />
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <img class="movo-logo-frame movo-bg-white" src="Media/Images/MovotecLogo.png" />
+                        </div>
+                        <div class="col-lg-offset-6 col-lg-3">
+                            <p>&copy; <%: DateTime.Now.Year %> - Movotec</p>
+                        </div>
                     </div>
-                    <div class="col-lg-offset-6 col-lg-3">
-                        <p>&copy; <%: DateTime.Now.Year %> - Movotec</p>
-                    </div>
-                </div>
 
                 
-            </div>
-        </footer>
+                </div>
+            </footer>
+        </div>
+
+     
     </form>
 </body>
 </html>
