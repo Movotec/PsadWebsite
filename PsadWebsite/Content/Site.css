@@ -1,0 +1,227 @@
+﻿/*
+    Color scheme
+
+Orange:
+#f67828
+rgb(246,120,40)
+rgba(246,120,40, 1)
+
+Blue:
+#0f4c64
+rgb(15,76,100)
+rgba(15,76,100, 1)
+
+
+Grey:
+#4f5358
+rgb(79,83,88)
+rgba(79,83,88, 1)
+
+White
+#f2f2f2
+rgb(242,242,242)
+rgba(242,242,242,1)
+
+*/
+
+*:hover, *:focus
+{
+    -webkit-transition: all 0.2s ease;
+    -moz-transition: all 0.2s ease;
+    -ms-transition: all 0.2s ease;
+    -o-transition: all 0.2s ease;
+    transition: all 0.2s ease;
+}
+
+/* Move down content because we have a fixed navbar that is 50px tall */
+body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+
+    font-size:1.6em;
+}
+
+/* Wrapping element */
+/* Set some basic padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+/* Set widths on the form inputs since otherwise they're 100% wide */
+.navbar-nav > li
+/*input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="tel"],
+input[type="select"]*/ {
+    max-width: 280px;
+}
+
+/* Links 
+a 
+{
+    color:#f67828;
+}*/
+
+/* Color classes */
+.movo-bg-orange, .navbar-toggle, .btn-primary
+{
+    background:#f67828;
+    /* rgb(246,120,40) */
+}
+.movo-bg-blue, .jumbotron, footer
+{
+    background:#0f4c64;
+    /* rgb(15,76,100) */
+}
+.movo-bg-grey 
+{
+    background:#4f5358;
+    /* rgb(79,83,88) */
+}
+.movo-bg-white
+{
+    background:#f2f2f2;
+}
+ /*.navbar-inverse .movo-txt-orange > li > a, .movo-txt-orange .navbar-brand */
+.movo-txt-orange, .movo-txt-orange .navbar-nav > li > a, .movo-txt-orange .navbar-header a,
+h1,h2,h3,h4, .jumbotron h1, .jumbotron h2, .jumbotron h3, .jumbotron h4 
+{
+    color:#f67828;
+}
+.movo-txt-blue
+{
+    color:#0f4c64;
+}
+.movo-txt-grey 
+{
+    color:#4f5358;
+}
+.movo-txt-white, body, .form-control
+{
+    color:#f2f2f2;
+}
+
+
+.btn-primary:hover
+{
+    background:#ff9551;
+    /*background:#ca611f;*/
+}
+
+.movo-logo-frame
+{
+    border-radius:45%;
+}
+
+/* Bootstrap overwrites */
+.navbar-fixed-top
+{
+    box-shadow: rgba(0,0,0,0.5) 0 -5px 5px 5px;
+}
+footer
+{
+    box-shadow: rgba(0,0,0,0.5) 0 5px 5px 5px;
+}
+.navbar-fixed-top, .navbar-toggle, .btn-primary, /*.navbar-nav*/ .input-group *
+{
+    border:none;
+}
+.navbar-nav .input-group
+{
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+.btn
+{
+    height:34px;
+}
+input[type="text"]
+{
+    max-width:none;
+}
+/* Radio lists and radio buttons*/
+.radio-list-vertical tr
+{
+    float:left;
+}
+.radio-list-vertical tr, .radio-list-vertical tr td input, .radio-list-vertical tr td label
+{
+    padding-left:20px;
+}
+input[type="radio"]:not(old)
+{
+    width: 20px;
+    background:#f67828;
+}
+
+
+/* Search bar*/
+.movo-search
+{
+    
+}
+
+textarea:focus,
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="datetime"]:focus,
+input[type="datetime-local"]:focus,
+input[type="date"]:focus,
+input[type="month"]:focus,
+input[type="time"]:focus,
+input[type="week"]:focus,
+input[type="number"]:focus,
+input[type="email"]:focus,
+input[type="url"]:focus,
+input[type="search"]:focus,
+input[type="tel"]:focus,
+input[type="color"]:focus,
+input[type="radio"]:focus,
+.uneditable-input:focus
+{
+
+    /* Specifcally for search bar*/
+    border-left:1px solid;
+    border-top:1px solid;
+    border-bottom:1px solid;
+    border-color:rgba(246,120,40, 1);
+
+    box-shadow:  0 0 5px rgba(246,120,40,1); /*0 1px 1px rgba(0, 0, 0, 0.075) inset,*/
+    outline: 0 none;
+}
+
+footer, html, body
+{
+    height:100%;
+}
+footer
+{
+    
+
+}
+hr
+{
+
+    border:2px solid #f67828;
+}
+
+
+
+/* Responsive: Portrait tablets and up */
+@media screen and (min-width: 768px) {
+    .jumbotron {
+        margin-top: 20px;
+    }
+    .body-content {
+        padding: 0;
+    }
+}
