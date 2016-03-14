@@ -1,0 +1,467 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- SQL XML created by WWW SQL Designer, https://github.com/ondras/wwwsqldesigner/ -->
+<!-- Active URL: file:///C:/Users/Chance%20Meister-Ham/Desktop/wwwsqldesigner-master/wwwsqldesigner-master/index.html -->
+<sql>
+<datatypes db="mssql">
+	<group label="Integer" color="rgb(238,238,170)">
+		<type label="TinyInt" length="0" sql="tinyint" re="INT" quote="" bytes="1" note="Integer data: 0 to 255"/>
+		<type label="SmallInt" length="0" sql="smallint" re="INT" quote="" bytes="2" note="Integer data: -32,768 to 32,767"/>
+		<type label="Int" length="0" sql="int" re="INT" quote="" bytes="4" note="Integer data: -2,147,483,648 to 2,147,483,647"/>
+		<type label="BigInt" length="0" sql="bigint" re="INT" quote="" bytes="8" note="Integer data: -9,223,372,036,854,775,808 to 9,223,372,036,854,775,807"/>
+	</group>
+
+	<group label="Monetary" color="rgb(238,238,170)">
+		<type label="Money" length="0" sql="money" re="FLOAT" quote="" bytes="8" note="Integer data: -922,337,203,685,477.5808 to 922,337,203,685,477.5807"/>
+		<type label="SmallMoney" length="0" sql="smallmoney" re="FLOAT" quote="" bytes="4" note="-214,748.3648 to 214,748.3647"/>
+	</group>
+
+	<group label="Numeric" color="rgb(238,238,170)">
+		<type label="Real" length="0" sql="real" re="FLOAT" quote="" bytes="4" note="Floating precision number data: -3.402823E+38 to 3.402823E+38"/>
+		<type label="Float" length="0" sql="float" re="FLOAT" quote="" bytes="8" note="Floating precision number data: -4.94E+324 to 4.94E+324"/>
+		<type label="Decimal" length="1" sql="decimal" re="DEC" quote="" bytes="n*" note="Fixed precision and scale numeric data: -10^38 +1 to 10^38 -1 (decimal and numeric are synonyms)"/>
+		<type label="Numeric" length="1" sql="numeric" re="DEC" quote="" bytes="n*" note="Fixed precision and scale numeric data: -10^38 +1 to 10^38 -1 (decimal and numeric are synonyms)"/>
+	</group>
+
+	<group label="Character" color="rgb(255,200,200)">
+		<type label="Char" length="0" sql="char" quote="'" bytes="n" note="Fixed-length character data with a maximum length of 8,000 characters"/>
+		<type label="Varchar" length="1" sql="varchar" quote="'" bytes="m &lt;= n" note="Variable-length data with a maximum of 8,000 characters"/>
+		<type label="Text" length="1" sql="text" quote="'" bytes="&lt;= 2,147,483,647" note="Variable-length data with a maximum length of 2,147,483,647 characters"/>
+		<type label="XML" length="0" sql="xml" quote="'" bytes="n" note="XML"/>
+	</group>
+
+	<group label="Unicode Character" color="rgb(255,200,200)">
+		<type label="nChar" length="0" sql="nchar" quote="'" bytes="n" note="Fixed-length Unicode data with a maximum length of 4,000 characters"/>
+		<type label="nVarchar" length="1" sql="nvarchar" quote="'" bytes="m &lt;= n" note="Variable-length Unicode data with a maximum length of 4,000 characters"/>
+		<type label="nText" length="1" sql="ntext" quote="'" bytes="&lt;= 2,147,483,647" note="Variable-length Unicode data with a maximum length of 1,073,741,823 characters"/>
+	</group>
+
+
+	<group label="Date &amp; Time" color="rgb(200,255,200)">
+		<type label="Datetime" length="0" sql="datetime" quote="" bytes="8" note="Jan 1, 1753 to Dec 31, 9999"/>
+		<type label="SmallDateTime" length="0" sql="smalldatetime" quote="" bytes="4" note="Jan 1, 1900 to Dec 31, 2079"/>
+	</group>
+
+	<group label="Binary" color="rgb(200,200,255)">
+		<type label="Binary" length="0" sql="binary" quote="'" bytes="n" note="Fixed-length binary data with a maximum length of 8,000 bytes"/>
+		<type label="Varbinary" length="1" sql="varbinary" quote="'" bytes="m &lt;= n" note="Variable-length binary data with a maximum length of 8,000 bytes"/>
+	</group>
+
+	<group label="Miscellaneous" color="rgb(200,220,255)">
+		<type label="Bit" length="0" sql="bit" quote="" bytes="1" note="Boolean: 1 or 0"/>
+		<type label="Image" length="1" sql="image" re="BLOB" quote="" bytes="0 to 2,147,483,647" note="Variable-length binary data with a maximum length of 2,147,483,647 bytes"/>
+		<type label="Timestamp" length="0" sql="timestamp" quote="" bytes="8" note="Locally unique binary number updated as a row gets updated"/>
+		<type label="SQL Variant" length="1" sql="sql_variant" quote="" bytes="" note="Stores any datatype except text, ntext, image, timestamp"/>
+		<type label="Uniqueidentifier" length="1" sql="uniqueidentifier" quote="" bytes="16" note="GUID"/>
+	</group>
+</datatypes><table x="642" y="34" name="Measurements">
+<row name="RecID" null="1" autoincrement="1">
+<datatype>uniqueidentifier</datatype>
+<default>NULL</default></row>
+<row name="PsadGuid" null="0" autoincrement="0">
+<datatype>uniqueidentifier</datatype>
+<default>NULL</default></row>
+<row name="PatientsGuid" null="1" autoincrement="0">
+<datatype>uniqueidentifier</datatype>
+<default>NULL</default><relation table="Patients" row="RecID" />
+</row>
+<row name="OperatorsGuid" null="1" autoincrement="0">
+<datatype>uniqueidentifier</datatype>
+<default>NULL</default><relation table="Operators" row="RecID" />
+</row>
+<row name="MeasureMode" null="1" autoincrement="0">
+<datatype>tinyint</datatype>
+<default>NULL</default></row>
+<row name="Limb" null="1" autoincrement="0">
+<datatype>tinyint</datatype>
+<default>NULL</default></row>
+<row name="Orientation" null="1" autoincrement="0">
+<datatype>tinyint</datatype>
+<default>NULL</default></row>
+<row name="MeasureTime" null="1" autoincrement="0">
+<datatype>decimal</datatype>
+<default>NULL</default></row>
+<row name="Comport" null="1" autoincrement="0">
+<datatype>tinyint</datatype>
+<default>NULL</default></row>
+<row name="FibulaLength" null="1" autoincrement="0">
+<datatype>decimal</datatype>
+<default>NULL</default></row>
+<row name="Comment" null="1" autoincrement="0">
+<datatype>ntext(500)</datatype>
+<default>NULL</default></row>
+<row name="FirmWare1" null="1" autoincrement="0">
+<datatype>tinyint</datatype>
+<default>NULL</default></row>
+<row name="FirmWare2" null="1" autoincrement="0">
+<datatype>tinyint</datatype>
+<default>NULL</default></row>
+<row name="FirmWare3" null="1" autoincrement="0">
+<datatype>tinyint</datatype>
+<default>NULL</default></row>
+<row name="MeasureDateTime" null="0" autoincrement="0">
+<datatype>datetime</datatype>
+<default>NULL</default></row>
+<row name="MeasureGuid" null="1" autoincrement="0">
+<datatype>uniqueidentifier</datatype>
+<default>NULL</default></row>
+<row name="Length1" null="1" autoincrement="0">
+<datatype>decimal</datatype>
+<default>NULL</default></row>
+<row name="Length2" null="1" autoincrement="0">
+<datatype>decimal</datatype>
+<default>NULL</default></row>
+<row name="StartAngle" null="1" autoincrement="0">
+<datatype>decimal</datatype>
+<default>NULL</default></row>
+<row name="MinAngle" null="1" autoincrement="0">
+<datatype>decimal</datatype>
+<default>NULL</default></row>
+<row name="MaxAngle" null="1" autoincrement="0">
+<datatype>decimal</datatype>
+<default>NULL</default></row>
+<row name="Rom" null="1" autoincrement="0">
+<datatype>decimal</datatype>
+<default>NULL</default></row>
+<row name="MaxAngularVelocity" null="1" autoincrement="0">
+<datatype>decimal</datatype>
+<default>NULL</default></row>
+<row name="MinAngularVelocity" null="1" autoincrement="0">
+<datatype>decimal</datatype>
+<default>NULL</default></row>
+<row name="MaxAecceleration" null="1" autoincrement="0">
+<datatype>decimal</datatype>
+<default>NULL</default></row>
+<row name="MinForce" null="1" autoincrement="0">
+<datatype>decimal</datatype>
+<default>NULL</default></row>
+<row name="MaxForce" null="1" autoincrement="0">
+<datatype>decimal</datatype>
+<default>NULL</default></row>
+<row name="MinXForce" null="1" autoincrement="0">
+<datatype>decimal</datatype>
+<default>NULL</default></row>
+<row name="MaxXForce" null="1" autoincrement="0">
+<datatype>decimal</datatype>
+<default>NULL</default></row>
+<row name="MinYForce" null="1" autoincrement="0">
+<datatype>decimal</datatype>
+<default>NULL</default></row>
+<row name="MaxYForce" null="1" autoincrement="0">
+<datatype>decimal</datatype>
+<default>NULL</default></row>
+<row name="Stiffness1" null="1" autoincrement="0">
+<datatype>decimal</datatype>
+<default>NULL</default></row>
+<row name="Stiffness2" null="1" autoincrement="0">
+<datatype>decimal</datatype>
+<default>NULL</default></row>
+<row name="Stiffness3" null="1" autoincrement="0">
+<datatype>decimal</datatype>
+<default>NULL</default></row>
+<row name="Stiffness4" null="1" autoincrement="0">
+<datatype>decimal</datatype>
+<default>NULL</default></row>
+<row name="Stiffness5" null="1" autoincrement="0">
+<datatype>decimal</datatype>
+<default>NULL</default></row>
+<row name="EMG1Activity" null="1" autoincrement="0">
+<datatype>decimal</datatype>
+<default>NULL</default></row>
+<row name="EMG2Activity" null="1" autoincrement="0">
+<datatype>decimal</datatype>
+<default>NULL</default></row>
+<row name="Batt0" null="1" autoincrement="0">
+<datatype>bit</datatype>
+<default>NULL</default></row>
+<row name="Batt1" null="1" autoincrement="0">
+<datatype>bit</datatype>
+<default>NULL</default></row>
+<row name="Batt2" null="1" autoincrement="0">
+<datatype>bit</datatype>
+<default>NULL</default></row>
+<row name="Led0" null="1" autoincrement="0">
+<datatype>bit</datatype>
+<default>NULL</default></row>
+<row name="Led1" null="1" autoincrement="0">
+<datatype>bit</datatype>
+<default>NULL</default></row>
+<row name="Led2" null="1" autoincrement="0">
+<datatype>bit</datatype>
+<default>NULL</default></row>
+<row name="Led3" null="1" autoincrement="0">
+<datatype>bit</datatype>
+<default>NULL</default></row>
+<row name="Led4" null="1" autoincrement="0">
+<datatype>bit</datatype>
+<default>NULL</default></row>
+<row name="Acc1XOffset" null="1" autoincrement="0">
+<datatype>decimal</datatype>
+<default>NULL</default></row>
+<row name="Acc1XGain" null="1" autoincrement="0">
+<datatype>decimal</datatype>
+<default>NULL</default></row>
+<row name="Acc1YOffset" null="1" autoincrement="0">
+<datatype>decimal</datatype>
+<default>NULL</default></row>
+<row name="Acc1YGain" null="1" autoincrement="0">
+<datatype>decimal</datatype>
+<default>NULL</default></row>
+<row name="Acc1ZOffset" null="1" autoincrement="0">
+<datatype>decimal</datatype>
+<default>NULL</default></row>
+<row name="Acc1ZGain" null="1" autoincrement="0">
+<datatype>decimal</datatype>
+<default>NULL</default></row>
+<row name="Acc2XOffset" null="1" autoincrement="0">
+<datatype>decimal</datatype>
+<default>NULL</default></row>
+<row name="Acc2XGain" null="1" autoincrement="0">
+<datatype>decimal</datatype>
+<default>NULL</default></row>
+<row name="Acc2YOffset" null="1" autoincrement="0">
+<datatype>decimal</datatype>
+<default>NULL</default></row>
+<row name="Acc2YGain" null="1" autoincrement="0">
+<datatype>decimal</datatype>
+<default>NULL</default></row>
+<row name="Acc2ZOffset" null="1" autoincrement="0">
+<datatype>decimal</datatype>
+<default>NULL</default></row>
+<row name="Acc2ZGain" null="1" autoincrement="0">
+<datatype>decimal</datatype>
+<default>NULL</default></row>
+<row name="GyroXOffset" null="1" autoincrement="0">
+<datatype>decimal</datatype>
+<default>NULL</default></row>
+<row name="GyroXGain" null="1" autoincrement="0">
+<datatype>decimal</datatype>
+<default>NULL</default></row>
+<row name="GyroYOffset" null="1" autoincrement="0">
+<datatype>decimal</datatype>
+<default>NULL</default></row>
+<row name="GyroYGain" null="1" autoincrement="0">
+<datatype>decimal</datatype>
+<default>NULL</default></row>
+<row name="GyroZOffset" null="1" autoincrement="0">
+<datatype>decimal</datatype>
+<default>NULL</default></row>
+<row name="GyroZGain" null="1" autoincrement="0">
+<datatype>decimal</datatype>
+<default>NULL</default><comment>Next is Emg1Offset in "S-5"</comment>
+</row>
+<key type="PRIMARY" name="">
+<part>MeasureGuid</part>
+</key>
+</table>
+<table x="313" y="628" name="Operators">
+<row name="RecID" null="1" autoincrement="1">
+<datatype>uniqueidentifier</datatype>
+<default>NULL</default></row>
+<row name="OrganisationID" null="1" autoincrement="0">
+<datatype>uniqueidentifier</datatype>
+<default>NULL</default><relation table="Organisation" row="RecID" />
+</row>
+<row name="OperatorName" null="0" autoincrement="0">
+<datatype>nvarchar(100)</datatype>
+<default>'NULL'</default></row>
+<row name="Address" null="1" autoincrement="0">
+<datatype>nvarchar(100)</datatype>
+<default>NULL</default></row>
+<row name="City" null="1" autoincrement="0">
+<datatype>nvarchar(100)</datatype>
+<default>NULL</default></row>
+<row name="Email" null="1" autoincrement="0">
+<datatype>nvarchar(100)</datatype>
+<default>NULL</default></row>
+<row name="Phone" null="1" autoincrement="0">
+<datatype>int</datatype>
+<default>NULL</default></row>
+<row name="Gender" null="1" autoincrement="0">
+<datatype>nvarchar</datatype>
+<default>NULL</default></row>
+<row name="Type" null="1" autoincrement="0">
+<datatype>nvarchar</datatype>
+<default>NULL</default></row>
+<row name="Status" null="1" autoincrement="0">
+<datatype>nvarchar</datatype>
+<default>NULL</default></row>
+<key type="PRIMARY" name="">
+<part>RecID</part>
+</key>
+</table>
+<table x="41" y="635" name="Organisation">
+<row name="RecID" null="1" autoincrement="1">
+<datatype>uniqueidentifier</datatype>
+<default>NULL</default></row>
+<row name="OrganisationName" null="0" autoincrement="0">
+<datatype>nvarchar(100)</datatype>
+<default>'NULL'</default></row>
+<row name="Address" null="1" autoincrement="0">
+<datatype>nvarchar(100)</datatype>
+<default>NULL</default></row>
+<row name="City" null="1" autoincrement="0">
+<datatype>nvarchar(100)</datatype>
+<default>NULL</default></row>
+<row name="Phone" null="1" autoincrement="0">
+<datatype>int</datatype>
+<default>NULL</default></row>
+<row name="Contact" null="1" autoincrement="0">
+<datatype>nvarchar(100)</datatype>
+<default>NULL</default></row>
+<row name="Email" null="1" autoincrement="0">
+<datatype>nvarchar(100)</datatype>
+<default>NULL</default></row>
+<row name="Status" null="1" autoincrement="0">
+<datatype>nvarchar</datatype>
+<default>NULL</default></row>
+<key type="PRIMARY" name="">
+<part>RecID</part>
+</key>
+</table>
+<table x="1041" y="437" name="MeasurementData">
+<row name="id" null="1" autoincrement="1">
+<datatype>tinyint</datatype>
+<default>NULL</default></row>
+<row name="MeasurementID" null="1" autoincrement="0">
+<datatype>uniqueidentifier</datatype>
+<default>NULL</default><relation table="Measurements" row="MeasureGuid" />
+</row>
+<key type="PRIMARY" name="">
+<part>id</part>
+</key>
+</table>
+<table x="327" y="38" name="Patients">
+<row name="RecID" null="1" autoincrement="1">
+<datatype>uniqueidentifier</datatype>
+<default>NULL</default></row>
+<row name="PatientName" null="0" autoincrement="0">
+<datatype>nvarchar(100)</datatype>
+<default>'NULL'</default></row>
+<row name="Address" null="1" autoincrement="0">
+<datatype>nvarchar(100)</datatype>
+<default>NULL</default></row>
+<row name="BornYear" null="1" autoincrement="0">
+<datatype>tinyint</datatype>
+<default>NULL</default></row>
+<row name="BornMonth" null="1" autoincrement="0">
+<datatype>tinyint</datatype>
+<default>NULL</default></row>
+<row name="BornDay" null="1" autoincrement="0">
+<datatype>tinyint</datatype>
+<default>NULL</default></row>
+<row name="Weight" null="1" autoincrement="0">
+<datatype>decimal</datatype>
+<default>NULL</default></row>
+<row name="Height" null="1" autoincrement="0">
+<datatype>decimal</datatype>
+<default>NULL</default></row>
+<row name="Phone" null="1" autoincrement="0">
+<datatype>int</datatype>
+<default>NULL</default></row>
+<row name="Email" null="1" autoincrement="0">
+<datatype>nvarchar(100)</datatype>
+<default>NULL</default></row>
+<row name="City" null="1" autoincrement="0">
+<datatype>nvarchar(100)</datatype>
+<default>NULL</default></row>
+<row name="ShoeSize" null="1" autoincrement="0">
+<datatype>decimal</datatype>
+<default>NULL</default></row>
+<row name="Comment" null="1" autoincrement="0">
+<datatype>ntext(500)</datatype>
+<default>NULL</default></row>
+<row name="AnkleCircumSize" null="1" autoincrement="0">
+<datatype>decimal</datatype>
+<default>NULL</default></row>
+<row name="Length1" null="1" autoincrement="0">
+<datatype>decimal</datatype>
+<default>NULL</default></row>
+<row name="Length2" null="1" autoincrement="0">
+<datatype>decimal</datatype>
+<default>NULL</default></row>
+<row name="FibulaLength" null="1" autoincrement="0">
+<datatype>decimal</datatype>
+<default>NULL</default></row>
+<row name="Gender" null="1" autoincrement="0">
+<datatype>nvarchar(6)</datatype>
+<default>NULL</default><comment>Should be foreign table</comment>
+</row>
+<row name="Status" null="1" autoincrement="0">
+<datatype>nvarchar(50)</datatype>
+<default>NULL</default></row>
+<row name="Diagnostic" null="1" autoincrement="0">
+<datatype>nvarchar(50)</datatype>
+<default>NULL</default><comment>Should be foreign table</comment>
+</row>
+<key type="PRIMARY" name="">
+<part>RecID</part>
+</key>
+</table>
+<table x="57" y="46" name="Gender">
+<row name="ID" null="1" autoincrement="1">
+<datatype>tinyint</datatype>
+<default>NULL</default></row>
+<row name="Gender" null="0" autoincrement="0">
+<datatype>nvarchar</datatype>
+<default>'NULL'</default></row>
+<key type="PRIMARY" name="">
+<part>ID</part>
+</key>
+</table>
+<table x="61" y="155" name="Type">
+<row name="ID" null="1" autoincrement="1">
+<datatype>tinyint</datatype>
+<default>NULL</default></row>
+<row name="Type" null="1" autoincrement="0">
+<datatype>nvarchar</datatype>
+<default>NULL</default></row>
+<key type="PRIMARY" name="">
+<part>ID</part>
+</key>
+</table>
+<table x="65" y="275" name="Status">
+<row name="ID" null="1" autoincrement="1">
+<datatype>tinyint</datatype>
+<default>NULL</default></row>
+<row name="Status" null="0" autoincrement="0">
+<datatype>nvarchar</datatype>
+<default>'NULL'</default></row>
+<key type="PRIMARY" name="">
+<part>ID</part>
+</key>
+</table>
+<table x="1070" y="137" name="MeasureMode">
+<row name="ID" null="1" autoincrement="1">
+<datatype>tinyint</datatype>
+<default>NULL</default></row>
+<row name="MeasureMode" null="0" autoincrement="0">
+<datatype>nvarchar</datatype>
+<default>'NULL'</default></row>
+<key type="PRIMARY" name="">
+<part>ID</part>
+</key>
+</table>
+<table x="921" y="135" name="Limb">
+<row name="ID" null="1" autoincrement="1">
+<datatype>tinyint</datatype>
+<default>NULL</default></row>
+<row name="Limb" null="1" autoincrement="0">
+<datatype>nvarchar</datatype>
+<default>NULL</default></row>
+<key type="PRIMARY" name="">
+<part>ID</part>
+</key>
+</table>
+<table x="1277" y="134" name="Comport">
+<row name="ID" null="1" autoincrement="1">
+<datatype>tinyint</datatype>
+<default>NULL</default></row>
+<row name="Comport" null="1" autoincrement="0">
+<datatype>nvarchar</datatype>
+<default>NULL</default></row>
+<key type="PRIMARY" name="">
+<part>ID</part>
+</key>
+<comment>??</comment>
+</table>
+</sql>

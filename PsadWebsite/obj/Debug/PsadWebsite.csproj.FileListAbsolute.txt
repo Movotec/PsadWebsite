@@ -77,3 +77,4 @@ c:\users\chance meister-ham\documents\visual studio 2015\Projects\PsadWebsite\Ps
 c:\users\chance meister-ham\documents\visual studio 2015\Projects\PsadWebsite\PsadWebsite\obj\Debug\PsadWebsite.csprojResolveAssemblyReference.cache
 c:\users\chance meister-ham\documents\visual studio 2015\Projects\PsadWebsite\PsadWebsite\obj\Debug\PsadWebsite.dll
 c:\users\chance meister-ham\documents\visual studio 2015\Projects\PsadWebsite\PsadWebsite\obj\Debug\PsadWebsite.pdb
+C:\Users\Chance Meister-Ham\Documents\Visual Studio 2015\Projects\PsadWebsite\PsadWebsite\bin\Microsoft.VisualBasic.dll
