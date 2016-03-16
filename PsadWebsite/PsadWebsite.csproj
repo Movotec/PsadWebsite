@@ -212,11 +212,15 @@
     <Content Include="App_Data\PsadData_log.ldf">
       <DependentUpon>PsadData.mdf</DependentUpon>
     </Content>
+    <Content Include="App_Data\TextFile1.txt" />
     <Content Include="Contact.aspx" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Site.css" />
-    <Content Include="DataConvert.aspx" />
+    <Content Include="Data\Measurements\Archived\dummy.txt" />
+    <Content Include="Data\Operators\dummy.txt" />
+    <Content Include="Data\Organisations\dummy.txt" />
+    <Content Include="Data\Patients\dummy.txt" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
@@ -225,6 +229,10 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Data\Measurement_64453d93-99c6-4d6a-b821-5fdfe120d774.csv" />
+    <Content Include="Data\Operators_5264fc9d-4abb-4b12-8c9d-94c0324a01c0.csv" />
+    <Content Include="Data\Organisations_2f539095-d792-4285-8b73-b91a4e32be58.csv" />
+    <Content Include="Data\Patients_1b6b7702-f47e-4c61-90df-5e1c533d78fc.csv" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Media\Images\MovotecLogo.png" />
     <Content Include="Scripts\ai.0.15.0-build58334.js" />
@@ -384,12 +392,12 @@
       <DependentUpon>VerifyPhoneNumber.aspx</DependentUpon>
     </Compile>
     <Content Include="App_Code\SearchHandler.cs" />
-    <Compile Include="App_Code\MovoDataConvert.cs" />
-    <Content Include="App_Code\Repository\CSVClass.cs" />
-    <Content Include="App_Code\Repository\DataRepository.cs" />
-    <Content Include="App_Code\Repository\HECPsadData.cs" />
-    <Content Include="App_Code\Repository\PsadMeasureInfo.cs" />
-    <Content Include="App_Code\Repository\PsadMeasureResult.cs" />
+    <Compile Include="App_Code\Repository\CSVClass.cs" />
+    <Compile Include="App_Code\Repository\DataRepository.cs" />
+    <Compile Include="App_Code\Repository\HECPsadData.cs" />
+    <Compile Include="App_Code\Repository\PsadMeasureInfo.cs" />
+    <Compile Include="App_Code\Repository\PsadMeasureResult.cs" />
+    <Compile Include="App_Code\Repository\PsadData.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="About.aspx.cs">
       <DependentUpon>About.aspx</DependentUpon>
@@ -407,13 +415,6 @@
     </Compile>
     <Compile Include="Contact.aspx.designer.cs">
       <DependentUpon>Contact.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="DataConvert.aspx.cs">
-      <DependentUpon>DataConvert.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="DataConvert.aspx.designer.cs">
-      <DependentUpon>DataConvert.aspx</DependentUpon>
     </Compile>
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>

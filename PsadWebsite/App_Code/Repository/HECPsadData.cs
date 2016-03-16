@@ -7,37 +7,39 @@ using System.Data.SqlClient;
 using System.Data;
 
 
-namespace HECPsadWebsite.Repository
+namespace PsadWebsite.App_Code.Repository
 {
     public class HECPsadData
     {
+        private string old = "~/HECPsad/";
+
         public int ImportCSVFiles()
         {
-            string _measurePathHECPsad = System.Web.Hosting.HostingEnvironment.MapPath("~/HECPsad/");
+            string _measurePathHECPsad = System.Web.Hosting.HostingEnvironment.MapPath(_newCsvPath);
             List<string> OrganisationFileList = new List<string>();
             List<string> PsadFileList = new List<string>();
             List<string> OperatorFileList = new List<string>();
             List<string> PatientFileList = new List<string>();
             List<string> MeasurementFileList = new List<string>();
 
-            // Iterate through all CSV files
-            foreach (string filestr in Directory.GetFiles(_measurePathHECPsad, "*.csv", SearchOption.AllDirectories))
+            // Iterate through all new CSV files, only in the data directory
+            foreach (string filestr in Directory.GetFiles(_measurePathHECPsad, "*.csv", SearchOption.TopDirectoryOnly))
             {
                 if ((File.GetAttributes(filestr) & FileAttributes.Archive) == FileAttributes.Archive)
                 {
                     if (filestr.Contains("Organisations_"))
                         OrganisationFileList.Add(filestr);
 
-                    if (filestr.Contains("Measurement_"))
+                    else if (filestr.Contains("Measurement_"))
                         MeasurementFileList.Add(filestr);
 
-                    if (filestr.Contains("Operators_"))
+                    else if (filestr.Contains("Operators_"))
                         OperatorFileList.Add(filestr);
 
-                    if (filestr.Contains("Patients_"))
+                    else if (filestr.Contains("Patients_"))
                         PatientFileList.Add(filestr);
 
-                    if (filestr.Contains("PSADs_"))
+                    else if (filestr.Contains("PSADs_"))
                         PsadFileList.Add(filestr);
                 }
             }
@@ -81,12 +83,18 @@ namespace HECPsadWebsite.Repository
 
             // Iterate through filelist
             foreach (string filestr in filelist)
-            { 
+            {
+                // Just transfer to datatable where table columns are called that same as in the sql tables
+
+
+
+                // Right now it transfers to data table and then to a MeasureInfoAndResult object
                 MeasureInfoAndResult mir =  GetMeasureInfoAndResult(filestr);
                 DateTime dt = new DateTime(mir.result.MeasureDateTime.Ticks);
                 if (mir.result.MeasureDateTime.Ticks < 1)
                     mir.result.MeasureDateTime = DateTime.Now;
 
+                // This can be reduced to iterate through keys and values (columns and row values) from a datatable
                 // Do calculations (TUE, Stenberg Johan ...)
                 fieldArray = ConvertToList("[OrganisationGuid]","[PatientGuid]","[OperatorGuid]","[PsadGuid]","[MeasureGuid]","[ExternFileName]","[MeasureMode]","[Limb]","[Orientation]","[MeasureDateTime]","[Comments]","[StartAngle]","[MinAngle]","[MaxAngle]","[MaxAngularVelocity]","[MinAngularVelocity]","[Rom]","[MaxAcceleration]","[MinForce]","[MaxForce]","[Stiffness1]","[Stiffness2]","[Stiffness3]","[Stiffness4]","[Stiffness5]");
                 valueArray = ConvertToList("'" + mir.info.OrganisationGuid.ToString() + "'","'" + mir.info.PatientGuid.ToString() + "'","'" + mir.info.OperatorGuid.ToString() + "'","'" + mir.info.PsadGuid.ToString() + "'","'" + mir.result.MeasureGuid.ToString() + "'","'" + filestr + "'","'" + mir.info.MeasureMode.ToString() + "'","'" + mir.info.Limb.ToString() + "'","'" + mir.info.Orientation.ToString() + "'","'" + mir.result.MeasureDateTime.ToString("yyyy-MM-dd HH:mm:ss") + "'","'" + mir.result.Comments.ToString() + "'", mir.result.StartAngle.ToString().Replace(',', '.') , mir.result.MinAngle.ToString().Replace(',', '.') , mir.result.MaxAngle.ToString().Replace(',', '.') , mir.result.MaxAngularVelocity.ToString().Replace(',', '.') , mir.result.MinAngularVelocity.ToString().Replace(',', '.') , mir.result.Rom.ToString().Replace(',', '.') , mir.result.MaxAcceleration.ToString().Replace(',', '.') , mir.result.MinForce.ToString().Replace(',', '.') , mir.result.MaxForce.ToString().Replace(',', '.') , mir.result.Stiffness1.ToString().Replace(',', '.') , mir.result.Stiffness2.ToString().Replace(',', '.') , mir.result.Stiffness3.ToString().Replace(',', '.') , mir.result.Stiffness4.ToString().Replace(',', '.') , mir.result.Stiffness5.ToString().Replace(',', '.'));
@@ -149,9 +157,10 @@ namespace HECPsadWebsite.Repository
             return args.ToArray();
         }
 
-        public  MeasureInfoAndResult GetMeasureInfoAndResult(string file)
+        // Makes datatable of csv and transfers that data to the Info & Result data objects
+        public MeasureInfoAndResult GetMeasureInfoAndResult(string file)
         {
-            Repository.DataRepository datarepository = new DataRepository();
+            DataRepository datarepository = new DataRepository();
             PsadMeasureInfo psadBasics = new PsadMeasureInfo();
 
             DataTable datatable = new DataTable();
@@ -285,6 +294,7 @@ namespace HECPsadWebsite.Repository
   
         private CSVClass csvIO = new CSVClass();
         private static string _connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=E:\MSSQLSERVER\HECPsadDB.mdf;Integrated Security=True;Connect Timeout=30";
+        private static string _newCsvPath = "~/Data/";
     }
 
     public class MeasureInfoAndResult

@@ -1,0 +1,4 @@
+﻿///////// Queries  /////////////////
+
+// Get column names of table
+SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'Measurements' // swap 'Measurements' with tablename

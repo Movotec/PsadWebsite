@@ -53,9 +53,9 @@
 		<type label="SQL Variant" length="1" sql="sql_variant" quote="" bytes="" note="Stores any datatype except text, ntext, image, timestamp"/>
 		<type label="Uniqueidentifier" length="1" sql="uniqueidentifier" quote="" bytes="16" note="GUID"/>
 	</group>
-</datatypes><table x="642" y="34" name="Measurements">
+</datatypes><table x="642" y="20" name="Measurements">
 <row name="RecID" null="1" autoincrement="1">
-<datatype>uniqueidentifier</datatype>
+<datatype>int</datatype>
 <default>NULL</default></row>
 <row name="PsadGuid" null="0" autoincrement="0">
 <datatype>uniqueidentifier</datatype>
@@ -69,34 +69,34 @@
 <default>NULL</default><relation table="Operators" row="RecID" />
 </row>
 <row name="MeasureMode" null="1" autoincrement="0">
-<datatype>tinyint</datatype>
+<datatype>int</datatype>
 <default>NULL</default></row>
 <row name="Limb" null="1" autoincrement="0">
-<datatype>tinyint</datatype>
+<datatype>int</datatype>
 <default>NULL</default></row>
 <row name="Orientation" null="1" autoincrement="0">
-<datatype>tinyint</datatype>
+<datatype>int</datatype>
 <default>NULL</default></row>
 <row name="MeasureTime" null="1" autoincrement="0">
-<datatype>decimal</datatype>
+<datatype>float</datatype>
 <default>NULL</default></row>
 <row name="Comport" null="1" autoincrement="0">
-<datatype>tinyint</datatype>
+<datatype>int</datatype>
 <default>NULL</default></row>
 <row name="FibulaLength" null="1" autoincrement="0">
-<datatype>decimal</datatype>
+<datatype>float</datatype>
 <default>NULL</default></row>
 <row name="Comment" null="1" autoincrement="0">
-<datatype>ntext(500)</datatype>
+<datatype>ntext</datatype>
 <default>NULL</default></row>
 <row name="FirmWare1" null="1" autoincrement="0">
-<datatype>tinyint</datatype>
+<datatype>int</datatype>
 <default>NULL</default></row>
 <row name="FirmWare2" null="1" autoincrement="0">
-<datatype>tinyint</datatype>
+<datatype>int</datatype>
 <default>NULL</default></row>
 <row name="FirmWare3" null="1" autoincrement="0">
-<datatype>tinyint</datatype>
+<datatype>int</datatype>
 <default>NULL</default></row>
 <row name="MeasureDateTime" null="0" autoincrement="0">
 <datatype>datetime</datatype>
@@ -105,70 +105,70 @@
 <datatype>uniqueidentifier</datatype>
 <default>NULL</default></row>
 <row name="Length1" null="1" autoincrement="0">
-<datatype>decimal</datatype>
+<datatype>float</datatype>
 <default>NULL</default></row>
 <row name="Length2" null="1" autoincrement="0">
-<datatype>decimal</datatype>
+<datatype>float</datatype>
 <default>NULL</default></row>
 <row name="StartAngle" null="1" autoincrement="0">
-<datatype>decimal</datatype>
+<datatype>float</datatype>
 <default>NULL</default></row>
 <row name="MinAngle" null="1" autoincrement="0">
-<datatype>decimal</datatype>
+<datatype>float</datatype>
 <default>NULL</default></row>
 <row name="MaxAngle" null="1" autoincrement="0">
-<datatype>decimal</datatype>
+<datatype>float</datatype>
 <default>NULL</default></row>
 <row name="Rom" null="1" autoincrement="0">
-<datatype>decimal</datatype>
+<datatype>float</datatype>
 <default>NULL</default></row>
 <row name="MaxAngularVelocity" null="1" autoincrement="0">
-<datatype>decimal</datatype>
+<datatype>float</datatype>
 <default>NULL</default></row>
 <row name="MinAngularVelocity" null="1" autoincrement="0">
-<datatype>decimal</datatype>
+<datatype>float</datatype>
 <default>NULL</default></row>
 <row name="MaxAecceleration" null="1" autoincrement="0">
-<datatype>decimal</datatype>
+<datatype>float</datatype>
 <default>NULL</default></row>
 <row name="MinForce" null="1" autoincrement="0">
-<datatype>decimal</datatype>
+<datatype>float</datatype>
 <default>NULL</default></row>
 <row name="MaxForce" null="1" autoincrement="0">
-<datatype>decimal</datatype>
+<datatype>float</datatype>
 <default>NULL</default></row>
 <row name="MinXForce" null="1" autoincrement="0">
-<datatype>decimal</datatype>
+<datatype>float</datatype>
 <default>NULL</default></row>
 <row name="MaxXForce" null="1" autoincrement="0">
-<datatype>decimal</datatype>
+<datatype>float</datatype>
 <default>NULL</default></row>
 <row name="MinYForce" null="1" autoincrement="0">
-<datatype>decimal</datatype>
+<datatype>float</datatype>
 <default>NULL</default></row>
 <row name="MaxYForce" null="1" autoincrement="0">
-<datatype>decimal</datatype>
+<datatype>float</datatype>
 <default>NULL</default></row>
 <row name="Stiffness1" null="1" autoincrement="0">
-<datatype>decimal</datatype>
+<datatype>float</datatype>
 <default>NULL</default></row>
 <row name="Stiffness2" null="1" autoincrement="0">
-<datatype>decimal</datatype>
+<datatype>float</datatype>
 <default>NULL</default></row>
 <row name="Stiffness3" null="1" autoincrement="0">
-<datatype>decimal</datatype>
+<datatype>float</datatype>
 <default>NULL</default></row>
 <row name="Stiffness4" null="1" autoincrement="0">
-<datatype>decimal</datatype>
+<datatype>float</datatype>
 <default>NULL</default></row>
 <row name="Stiffness5" null="1" autoincrement="0">
-<datatype>decimal</datatype>
+<datatype>float</datatype>
 <default>NULL</default></row>
 <row name="EMG1Activity" null="1" autoincrement="0">
-<datatype>decimal</datatype>
+<datatype>float</datatype>
 <default>NULL</default></row>
 <row name="EMG2Activity" null="1" autoincrement="0">
-<datatype>decimal</datatype>
+<datatype>float</datatype>
 <default>NULL</default></row>
 <row name="Batt0" null="1" autoincrement="0">
 <datatype>bit</datatype>
@@ -195,66 +195,143 @@
 <datatype>bit</datatype>
 <default>NULL</default></row>
 <row name="Acc1XOffset" null="1" autoincrement="0">
-<datatype>decimal</datatype>
+<datatype>float</datatype>
 <default>NULL</default></row>
 <row name="Acc1XGain" null="1" autoincrement="0">
-<datatype>decimal</datatype>
+<datatype>float</datatype>
 <default>NULL</default></row>
 <row name="Acc1YOffset" null="1" autoincrement="0">
-<datatype>decimal</datatype>
+<datatype>float</datatype>
 <default>NULL</default></row>
 <row name="Acc1YGain" null="1" autoincrement="0">
-<datatype>decimal</datatype>
+<datatype>float</datatype>
 <default>NULL</default></row>
 <row name="Acc1ZOffset" null="1" autoincrement="0">
-<datatype>decimal</datatype>
+<datatype>float</datatype>
 <default>NULL</default></row>
 <row name="Acc1ZGain" null="1" autoincrement="0">
-<datatype>decimal</datatype>
+<datatype>float</datatype>
 <default>NULL</default></row>
 <row name="Acc2XOffset" null="1" autoincrement="0">
-<datatype>decimal</datatype>
+<datatype>float</datatype>
 <default>NULL</default></row>
 <row name="Acc2XGain" null="1" autoincrement="0">
-<datatype>decimal</datatype>
+<datatype>float</datatype>
 <default>NULL</default></row>
 <row name="Acc2YOffset" null="1" autoincrement="0">
-<datatype>decimal</datatype>
+<datatype>float</datatype>
 <default>NULL</default></row>
 <row name="Acc2YGain" null="1" autoincrement="0">
-<datatype>decimal</datatype>
+<datatype>float</datatype>
 <default>NULL</default></row>
 <row name="Acc2ZOffset" null="1" autoincrement="0">
-<datatype>decimal</datatype>
+<datatype>float</datatype>
 <default>NULL</default></row>
 <row name="Acc2ZGain" null="1" autoincrement="0">
-<datatype>decimal</datatype>
+<datatype>float</datatype>
 <default>NULL</default></row>
 <row name="GyroXOffset" null="1" autoincrement="0">
-<datatype>decimal</datatype>
+<datatype>float</datatype>
 <default>NULL</default></row>
 <row name="GyroXGain" null="1" autoincrement="0">
-<datatype>decimal</datatype>
+<datatype>float</datatype>
 <default>NULL</default></row>
 <row name="GyroYOffset" null="1" autoincrement="0">
-<datatype>decimal</datatype>
+<datatype>float</datatype>
 <default>NULL</default></row>
 <row name="GyroYGain" null="1" autoincrement="0">
-<datatype>decimal</datatype>
+<datatype>float</datatype>
 <default>NULL</default></row>
 <row name="GyroZOffset" null="1" autoincrement="0">
-<datatype>decimal</datatype>
+<datatype>float</datatype>
 <default>NULL</default></row>
 <row name="GyroZGain" null="1" autoincrement="0">
-<datatype>decimal</datatype>
-<default>NULL</default><comment>Next is Emg1Offset in "S-5"</comment>
-</row>
+<datatype>float</datatype>
+<default>NULL</default></row>
+<row name="Emg1Offset" null="1" autoincrement="0">
+<datatype>float</datatype>
+<default>NULL</default></row>
+<row name="Emg1Gain" null="1" autoincrement="0">
+<datatype>float</datatype>
+<default>NULL</default></row>
+<row name="Emg2Offset" null="1" autoincrement="0">
+<datatype>float</datatype>
+<default>NULL</default></row>
+<row name="Emg2Offset" null="1" autoincrement="0">
+<datatype>float</datatype>
+<default>NULL</default></row>
+<row name="Emg2Gain" null="1" autoincrement="0">
+<datatype>float</datatype>
+<default>NULL</default></row>
+<row name="Straingauge1Offset" null="1" autoincrement="0">
+<datatype>float</datatype>
+<default>NULL</default></row>
+<row name="Straingauge1Gain" null="1" autoincrement="0">
+<datatype>float</datatype>
+<default>NULL</default></row>
+<row name="Straingauge2Offset" null="1" autoincrement="0">
+<datatype>float</datatype>
+<default>NULL</default></row>
+<row name="Straingauge2Gain" null="1" autoincrement="0">
+<datatype>float</datatype>
+<default>NULL</default></row>
+<row name="Straingauge3Offset" null="1" autoincrement="0">
+<datatype>float</datatype>
+<default>NULL</default></row>
+<row name="Straingauge3Gain" null="1" autoincrement="0">
+<datatype>float</datatype>
+<default>NULL</default></row>
+<row name="Straingauge4Offset" null="1" autoincrement="0">
+<datatype>float</datatype>
+<default>NULL</default></row>
+<row name="Straingauge4Gain" null="1" autoincrement="0">
+<datatype>float</datatype>
+<default>NULL</default></row>
+<row name="PsadWeight" null="1" autoincrement="0">
+<datatype>float</datatype>
+<default>NULL</default></row>
+<row name="PsadAcc12" null="1" autoincrement="0">
+<datatype>float</datatype>
+<default>NULL</default></row>
+<row name="PsadAcc1h" null="1" autoincrement="0">
+<datatype>float</datatype>
+<default>NULL</default></row>
+<row name="PsadAcc2h" null="1" autoincrement="0">
+<datatype>float</datatype>
+<default>NULL</default></row>
+<row name="Psadh" null="1" autoincrement="0">
+<datatype>float</datatype>
+<default>NULL</default></row>
+<row name="AccGRange" null="1" autoincrement="0">
+<datatype>float</datatype>
+<default>NULL</default></row>
+<row name="GyroDegreePrSec" null="1" autoincrement="0">
+<datatype>float</datatype>
+<default>NULL</default></row>
+<row name="SPS" null="1" autoincrement="0">
+<datatype>float</datatype>
+<default>NULL</default></row>
+<row name="Emg1Pad" null="1" autoincrement="0">
+<datatype>int</datatype>
+<default>NULL</default></row>
+<row name="Emg2Pad" null="1" autoincrement="0">
+<datatype>int</datatype>
+<default>NULL</default></row>
+<row name="BatteryLow" null="1" autoincrement="0">
+<datatype>int</datatype>
+<default>NULL</default></row>
+<row name="BatteryHigh" null="1" autoincrement="0">
+<datatype>int</datatype>
+<default>NULL</default></row>
+<row name="LastCalibrationDateAndTime" null="1" autoincrement="0">
+<datatype>datetime</datatype>
+<default>NULL</default></row>
 <key type="PRIMARY" name="">
 <part>MeasureGuid</part>
 </key>
 </table>
-<table x="313" y="628" name="Operators">
-<row name="RecID" null="1" autoincrement="1">
+<table x="320" y="623" name="Operators">
+<row name="RecID" null="1" autoincrement="0">
 <datatype>uniqueidentifier</datatype>
 <default>NULL</default></row>
 <row name="OrganisationID" null="1" autoincrement="0">
@@ -289,8 +366,8 @@
 <part>RecID</part>
 </key>
 </table>
-<table x="41" y="635" name="Organisation">
-<row name="RecID" null="1" autoincrement="1">
+<table x="42" y="648" name="Organisation">
+<row name="RecID" null="1" autoincrement="0">
 <datatype>uniqueidentifier</datatype>
 <default>NULL</default></row>
 <row name="OrganisationName" null="0" autoincrement="0">
@@ -318,20 +395,74 @@
 <part>RecID</part>
 </key>
 </table>
-<table x="1041" y="437" name="MeasurementData">
-<row name="id" null="1" autoincrement="1">
-<datatype>tinyint</datatype>
+<table x="1116" y="363" name="MeasurementData">
+<row name="ID" null="1" autoincrement="1">
+<datatype>int</datatype>
 <default>NULL</default></row>
 <row name="MeasurementID" null="1" autoincrement="0">
 <datatype>uniqueidentifier</datatype>
 <default>NULL</default><relation table="Measurements" row="MeasureGuid" />
 </row>
+<row name="Switches" null="1" autoincrement="0">
+<datatype>int</datatype>
+<default>NULL</default></row>
+<row name="Clock" null="1" autoincrement="0">
+<datatype>float</datatype>
+<default>NULL</default></row>
+<row name="Acc1X" null="1" autoincrement="0">
+<datatype>float</datatype>
+<default>NULL</default></row>
+<row name="Acc1Y" null="1" autoincrement="0">
+<datatype>float</datatype>
+<default>NULL</default></row>
+<row name="Acc1Z" null="1" autoincrement="0">
+<datatype>float</datatype>
+<default>NULL</default></row>
+<row name="Acc2X" null="1" autoincrement="0">
+<datatype>float</datatype>
+<default>NULL</default></row>
+<row name="Acc2Y" null="1" autoincrement="0">
+<datatype>float</datatype>
+<default>NULL</default></row>
+<row name="Acc2Z" null="1" autoincrement="0">
+<datatype>float</datatype>
+<default>NULL</default></row>
+<row name="GyroX" null="1" autoincrement="0">
+<datatype>float</datatype>
+<default>NULL</default></row>
+<row name="GyroY" null="1" autoincrement="0">
+<datatype>float</datatype>
+<default>NULL</default></row>
+<row name="GyroZ" null="1" autoincrement="0">
+<datatype>float</datatype>
+<default>NULL</default></row>
+<row name="Emg1" null="1" autoincrement="0">
+<datatype>float</datatype>
+<default>NULL</default></row>
+<row name="Emg2" null="1" autoincrement="0">
+<datatype>float</datatype>
+<default>NULL</default></row>
+<row name="Straingauge1" null="1" autoincrement="0">
+<datatype>float</datatype>
+<default>NULL</default></row>
+<row name="Straingauge2" null="1" autoincrement="0">
+<datatype>float</datatype>
+<default>NULL</default></row>
+<row name="Straingauge3" null="1" autoincrement="0">
+<datatype>float</datatype>
+<default>NULL</default></row>
+<row name="Straingauge4" null="1" autoincrement="0">
+<datatype>float</datatype>
+<default>NULL</default></row>
+<row name="Error" null="1" autoincrement="0">
+<datatype>int</datatype>
+<default>NULL</default></row>
 <key type="PRIMARY" name="">
-<part>id</part>
+<part>ID</part>
 </key>
 </table>
-<table x="327" y="38" name="Patients">
-<row name="RecID" null="1" autoincrement="1">
+<table x="316" y="47" name="Patients">
+<row name="RecID" null="1" autoincrement="0">
 <datatype>uniqueidentifier</datatype>
 <default>NULL</default></row>
 <row name="PatientName" null="0" autoincrement="0">
@@ -341,19 +472,19 @@
 <datatype>nvarchar(100)</datatype>
 <default>NULL</default></row>
 <row name="BornYear" null="1" autoincrement="0">
-<datatype>tinyint</datatype>
+<datatype>int</datatype>
 <default>NULL</default></row>
 <row name="BornMonth" null="1" autoincrement="0">
-<datatype>tinyint</datatype>
+<datatype>int</datatype>
 <default>NULL</default></row>
 <row name="BornDay" null="1" autoincrement="0">
-<datatype>tinyint</datatype>
+<datatype>int</datatype>
 <default>NULL</default></row>
 <row name="Weight" null="1" autoincrement="0">
-<datatype>decimal</datatype>
+<datatype>float</datatype>
 <default>NULL</default></row>
 <row name="Height" null="1" autoincrement="0">
-<datatype>decimal</datatype>
+<datatype>float</datatype>
 <default>NULL</default></row>
 <row name="Phone" null="1" autoincrement="0">
 <datatype>int</datatype>
@@ -365,27 +496,26 @@
 <datatype>nvarchar(100)</datatype>
 <default>NULL</default></row>
 <row name="ShoeSize" null="1" autoincrement="0">
-<datatype>decimal</datatype>
+<datatype>float</datatype>
 <default>NULL</default></row>
 <row name="Comment" null="1" autoincrement="0">
-<datatype>ntext(500)</datatype>
+<datatype>ntext</datatype>
 <default>NULL</default></row>
 <row name="AnkleCircumSize" null="1" autoincrement="0">
-<datatype>decimal</datatype>
+<datatype>float</datatype>
 <default>NULL</default></row>
 <row name="Length1" null="1" autoincrement="0">
-<datatype>decimal</datatype>
+<datatype>float</datatype>
 <default>NULL</default></row>
 <row name="Length2" null="1" autoincrement="0">
-<datatype>decimal</datatype>
+<datatype>float</datatype>
 <default>NULL</default></row>
 <row name="FibulaLength" null="1" autoincrement="0">
-<datatype>decimal</datatype>
+<datatype>float</datatype>
 <default>NULL</default></row>
 <row name="Gender" null="1" autoincrement="0">
 <datatype>nvarchar(6)</datatype>
-<default>NULL</default><comment>Should be foreign table</comment>
-</row>
+<default>NULL</default></row>
 <row name="Status" null="1" autoincrement="0">
 <datatype>nvarchar(50)</datatype>
 <default>NULL</default></row>
@@ -396,72 +526,5 @@
 <key type="PRIMARY" name="">
 <part>RecID</part>
 </key>
-</table>
-<table x="57" y="46" name="Gender">
-<row name="ID" null="1" autoincrement="1">
-<datatype>tinyint</datatype>
-<default>NULL</default></row>
-<row name="Gender" null="0" autoincrement="0">
-<datatype>nvarchar</datatype>
-<default>'NULL'</default></row>
-<key type="PRIMARY" name="">
-<part>ID</part>
-</key>
-</table>
-<table x="61" y="155" name="Type">
-<row name="ID" null="1" autoincrement="1">
-<datatype>tinyint</datatype>
-<default>NULL</default></row>
-<row name="Type" null="1" autoincrement="0">
-<datatype>nvarchar</datatype>
-<default>NULL</default></row>
-<key type="PRIMARY" name="">
-<part>ID</part>
-</key>
-</table>
-<table x="65" y="275" name="Status">
-<row name="ID" null="1" autoincrement="1">
-<datatype>tinyint</datatype>
-<default>NULL</default></row>
-<row name="Status" null="0" autoincrement="0">
-<datatype>nvarchar</datatype>
-<default>'NULL'</default></row>
-<key type="PRIMARY" name="">
-<part>ID</part>
-</key>
-</table>
-<table x="1070" y="137" name="MeasureMode">
-<row name="ID" null="1" autoincrement="1">
-<datatype>tinyint</datatype>
-<default>NULL</default></row>
-<row name="MeasureMode" null="0" autoincrement="0">
-<datatype>nvarchar</datatype>
-<default>'NULL'</default></row>
-<key type="PRIMARY" name="">
-<part>ID</part>
-</key>
-</table>
-<table x="921" y="135" name="Limb">
-<row name="ID" null="1" autoincrement="1">
-<datatype>tinyint</datatype>
-<default>NULL</default></row>
-<row name="Limb" null="1" autoincrement="0">
-<datatype>nvarchar</datatype>
-<default>NULL</default></row>
-<key type="PRIMARY" name="">
-<part>ID</part>
-</key>
-</table>
-<table x="1277" y="134" name="Comport">
-<row name="ID" null="1" autoincrement="1">
-<datatype>tinyint</datatype>
-<default>NULL</default></row>
-<row name="Comport" null="1" autoincrement="0">
-<datatype>nvarchar</datatype>
-<default>NULL</default></row>
-<key type="PRIMARY" name="">
-<part>ID</part>
-</key>
-<comment>??</comment>
 </table>
 </sql>

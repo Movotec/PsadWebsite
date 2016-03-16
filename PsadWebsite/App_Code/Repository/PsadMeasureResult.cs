@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace HECPsadWebsite.Repository
+namespace PsadWebsite.App_Code.Repository
 {
     public class PsadMeasureResult
     {

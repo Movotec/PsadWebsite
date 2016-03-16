@@ -7,6 +7,7 @@ using System.Web.UI.WebControls;
 using System.Data.SqlClient;
 using System.Configuration;
 using System.Data;
+using PsadWebsite.App_Code.Repository;
 
 namespace PsadWebsite
 {
@@ -24,6 +25,20 @@ namespace PsadWebsite
             adap.Fill(ds);
             RepeaterTest.DataSource = ds;
             RepeaterTest.DataBind();
+
+
+       
         }
+
+        protected void ButtonCsvToSql_Click(object sender, EventArgs e)
+        {
+            PsadData data = new PsadData();
+            //data.ImportCSVFiles();
+
+            List<string> columns;
+            columns = data.GetSqlColumnNames("Measurements");
+            string val = columns[3];
+        }
+
     }
 }

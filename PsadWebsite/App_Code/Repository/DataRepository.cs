@@ -10,7 +10,7 @@ using Microsoft.VisualBasic.FileIO;
 using System.Reflection;
 using System.Globalization;
 
-namespace HECPsadWebsite.Repository
+namespace PsadWebsite.App_Code.Repository
 {
     public class DataRepository
     {

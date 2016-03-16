@@ -8,8 +8,9 @@ using System.Data.OleDb;
 using System.IO;
 using System.Reflection;
 using Microsoft.VisualBasic.FileIO;
+using System.Web;
 
-namespace HECPsadWebsite.Repository
+namespace PsadWebsite.App_Code.Repository
 {
     class CSVClass
     {
@@ -59,25 +60,36 @@ namespace HECPsadWebsite.Repository
             return CreateCSVFile(obj, obj.GetType().Name, folder);
         }
 
-
         public bool EnsurePath(string Path)
         {
-            string[] paths = FullPath(Path).Split('\\');
+            string path = HttpContext.Current.Server.MapPath(_dataFolder);
 
-            string path = null;
-            for (int i = 0; i < paths.Length; i++)
+            if (Directory.Exists(path) == false)
             {
-                path = path + paths[i];
-                if (!Directory.Exists(path))
-                {
-                    Directory.CreateDirectory(path);
-                }
-                path += @"\";
+                Directory.CreateDirectory(path);
             }
+
             return true;
         }
 
-        public DataTable GetDataTableFromCSVFile(string csv_file_path, int start, int MaxCount)
+        //public bool EnsurePath(string Path)
+        //{
+        //    string[] paths = FullPath(Path).Split('\\');
+
+        //    string path = null;
+        //    for (int i = 0; i < paths.Length; i++)
+        //    {
+        //        path = path + paths[i];
+        //        if (!Directory.Exists(path))
+        //        {
+        //            Directory.CreateDirectory(path);
+        //        }
+        //        path += @"\";
+        //    }
+        //    return true;
+        //}
+
+        public DataTable GetDataTableFromCSVFile(string csvFilePath, int start, int MaxCount)
         {
             DataTable csvData = new DataTable();
             int count = 0;
@@ -85,10 +97,12 @@ namespace HECPsadWebsite.Repository
 
             try
             {
-                using (TextFieldParser csvReader = new TextFieldParser(csv_file_path, System.Text.Encoding.Default))
+                using (TextFieldParser csvReader = new TextFieldParser(csvFilePath, System.Text.Encoding.Default))
                 {
                     csvReader.SetDelimiters(new string[] { _delimeter });
                     csvReader.HasFieldsEnclosedInQuotes = true;
+
+
 
                     while (count++ < start) //Skip line
                         csvReader.ReadFields();
@@ -336,7 +350,7 @@ namespace HECPsadWebsite.Repository
         }
 
 
-        private const string _dataFolder = @"\Data\MasterData\";
+        private const string _dataFolder = @"~\Data\";
         private const string _fileextension = @".csv";
         private const string _delimeter = @";";
         private const string _synchronized = "Synchronized";
