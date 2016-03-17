@@ -141,12 +141,13 @@ namespace PsadWebsite.App_Code.Repository
         // Creates a datatable of csv measurment file, the table conains however many columns are in the file and 1 row of vaules
         private DataTable GetMeasurement(string csvFilePath)
         {
+            Dictionary<string, string> measurementTable = new Dictionary<string, string>();
+            List<string> sqlColumns = GetSqlColumnNames(_measurementsTable);
+
             DataTable csvData = new DataTable();
             //int count = 0;
             int lines = 4; // We only look at the 4 first lines of measurement csv file for the data needed for the measurement table
             //MaxCount += start;
-
-            List<string> sqlColumn;
 
             try
             {
@@ -155,37 +156,91 @@ namespace PsadWebsite.App_Code.Repository
                     csvReader.SetDelimiters(new string[] { _delimeter });
                     csvReader.HasFieldsEnclosedInQuotes = true;
 
-                    for (int i = 1; i <= lines; i++)
+                    //List<string> fields = new List<string>();
+                    //List<int> excludedColumns = new List<int>();
+
+                    for (int i = 0; i < lines; i = i + 2)
                     {
-                        string[] colFields = csvReader.ReadFields();
+                        string[] columns = csvReader.ReadFields();
 
+                        string[] fields = csvReader.ReadFields();
 
-//!!                        // This should actually check if there is a column with this name in the sql table
-//!!                        // Perhaps get name of all sql table column names and compare against to see if it exsits, if it does'nt disregard data
+                        int length = 0;
 
+                        if (columns.Length == fields.Length)
+                            length = columns.Length;
 
-                        if ((i % 2) == 0) // if even number it is row values
+                        for (int j = 0; j < length; j++)
                         {
-                            for (int j = 0; j < colFields.Length; j++)      
-                            {
-                                if (colFields[i] == string.Empty)
-                                {
-                                    colFields[i] = null;
-                                }
-                            }
+                            if (columns[j] == string.Empty || columns[j] == null)
+                                break;
 
-                            csvData.Rows.Add(colFields);
-                        }
-                        else // if odd it is column names
-                        {
-                            foreach (string column in colFields)
-                            {
-                                DataColumn dataColumn = new DataColumn(column);
-                                dataColumn.AllowDBNull = true;
-                                csvData.Columns.Add(dataColumn);
-                            }
+                            measurementTable.Add(columns[j], fields[j]);
                         }
                     }
+// OperatorsGuid is spelled wrong on database
+// Check for other inconsitensies
+                    foreach (string column in sqlColumns) // removes all the columns that do not exist in the database table
+                    {
+                        if (measurementTable.ContainsKey(column) == false)
+                        {
+                            measurementTable.Remove(column);
+                        }
+                    }
+
+
+                    //for (int i = 1; i <= lines; i++)
+                    //{
+                    //    string[] colFields = csvReader.ReadFields();
+
+
+                    //    //!!                        // This should actually check if there is a column with this name in the sql table
+                    //    //!!                        // Perhaps get name of all sql table column names and compare against to see if it exsits, if it does'nt disregard data
+
+                    //    // breaks cause starts adding more columns when a row is already added and therfore breaks it
+                    //    if ((i % 2) == 0) // if even number it is row values
+                    //    {
+                    //        for (int j = 0; j < colFields.Length; j++)
+                    //        {
+                    //            if (colFields[i] == string.Empty)
+                    //            {
+                    //                colFields[i] = null;
+                    //            }
+                    //            fields.Add(colFields[j]);
+                    //        }
+
+                    //        //csvData.Rows.Add(colFields);
+                    //    }
+                    //    else // if odd it is column names
+                    //    {
+
+                    //        foreach (string column in colFields)
+                    //        {
+                    //            DataColumn dataColumn = new DataColumn(column);
+                    //            dataColumn.AllowDBNull = true;
+                    //            csvData.Columns.Add(dataColumn); // add it
+
+                    //            //if (csvData.Columns.Contains(dataColumn.ColumnName) == false) // if the datatable does not already contain the column name
+                    //            //{
+                    //            //}
+
+                    //        }
+                    //    }
+                    //}
+
+                    //csvData.Rows.Add(fields);
+
+
+                    //foreach (string column in sqlColumns) // removes all the columns that do not exist in the database table
+                    //{
+                    //    if (csvData.Columns.Contains(column) == false)
+                    //    {
+                    //        csvData.Columns.Remove(column);
+                    //    }
+                    //}
+
+
+
 
                     //while (count++ < start) //Skip line
                     //    csvReader.ReadFields();
@@ -224,11 +279,12 @@ namespace PsadWebsite.App_Code.Repository
                         
                         if (reader.HasRows)
                         {
-                            for (int i = 1; i <= reader.FieldCount; i++)
+                            while (reader.Read())
                             {
-                                //if (!reader.IsDBNull(i))
                                 columnNames.Add(reader["COLUMN_NAME"].ToString());  // No data is present, perhaps sql statement is lacking "scheme" for table. Test other sql statement
                             }
+                            //if (!reader.IsDBNull(i))
+
                         }
                         connection.Close();
                     }

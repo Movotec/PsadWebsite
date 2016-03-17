@@ -33,11 +33,11 @@ namespace PsadWebsite
         protected void ButtonCsvToSql_Click(object sender, EventArgs e)
         {
             PsadData data = new PsadData();
-            //data.ImportCSVFiles();
+            data.ImportCSVFiles();
 
-            List<string> columns;
-            columns = data.GetSqlColumnNames("Measurements");
-            string val = columns[3];
+            //List<string> columns;
+            //columns = data.GetSqlColumnNames("Measurements");
+            //string val = columns[3];
         }
 
     }
