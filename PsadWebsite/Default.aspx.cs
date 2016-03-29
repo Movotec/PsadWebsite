@@ -15,16 +15,16 @@ namespace PsadWebsite
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            SqlCommand cmd = new SqlCommand();
-            SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["EIPsad"].ConnectionString);
-            cmd.Connection = conn;
-            cmd.CommandText = "SELECT id FROM test_table";
+            //SqlCommand cmd = new SqlCommand();
+            //SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["EIPsad"].ConnectionString);
+            //cmd.Connection = conn;
+            //cmd.CommandText = "SELECT id FROM test_table";
 
-            SqlDataAdapter adap = new SqlDataAdapter(cmd);
-            DataSet ds = new DataSet();
-            adap.Fill(ds);
-            RepeaterTest.DataSource = ds;
-            RepeaterTest.DataBind();
+            //SqlDataAdapter adap = new SqlDataAdapter(cmd);
+            //DataSet ds = new DataSet();
+            //adap.Fill(ds);
+            //RepeaterTest.DataSource = ds;
+            //RepeaterTest.DataBind();
 
 
        
@@ -34,6 +34,8 @@ namespace PsadWebsite
         {
             PsadData data = new PsadData();
             data.ImportCSVFiles();
+
+            Response.Redirect(Request.RawUrl);
 
             //List<string> columns;
             //columns = data.GetSqlColumnNames("Measurements");

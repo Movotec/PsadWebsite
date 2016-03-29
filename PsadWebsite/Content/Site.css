@@ -24,6 +24,10 @@ rgba(242,242,242,1)
 
 */
 
+.data-grid 
+{
+    font-size:10px;
+}
 
 .nav > li > a, .navbar-brand
 {
