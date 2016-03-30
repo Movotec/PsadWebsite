@@ -394,10 +394,17 @@
     <Compile Include="Account\VerifyPhoneNumber.aspx.designer.cs">
       <DependentUpon>VerifyPhoneNumber.aspx</DependentUpon>
     </Compile>
-    <Content Include="App_Code\SearchHandler.cs" />
+    <Compile Include="App_Code\EnitityModels\MeasurementData.cs" />
+    <Compile Include="App_Code\EnitityModels\Measurements.cs" />
+    <Compile Include="App_Code\EnitityModels\Operators.cs" />
+    <Compile Include="App_Code\EnitityModels\Organisation.cs" />
+    <Compile Include="App_Code\EnitityModels\Patients.cs" />
+    <Compile Include="App_Code\EnitityModels\PsadDatabase.cs" />
+    <Compile Include="App_Code\SearchHandler.cs" />
     <Compile Include="App_Code\Repository\CSVClass.cs" />
     <Compile Include="App_Code\Repository\DataRepository.cs" />
     <Compile Include="App_Code\Repository\HECPsadData.cs" />
+    <Compile Include="App_Code\Repository\PsadCalculation.cs" />
     <Compile Include="App_Code\Repository\PsadMeasureInfo.cs" />
     <Compile Include="App_Code\Repository\PsadMeasureResult.cs" />
     <Compile Include="App_Code\Repository\PsadData.cs" />

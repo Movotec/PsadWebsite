@@ -18,8 +18,8 @@ namespace PsadWebsite.App_Code
         SearchHandler(string connectionString, string parameter)
         {
             command = new SqlCommand();
-            command.Connection = connection;
             connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString);
+            command.Connection = connection;
         }
 
         public DataSet Query(string parameter)

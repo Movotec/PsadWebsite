@@ -12,6 +12,8 @@ using System.Diagnostics;
 
 // To do:
 //      Transfer measurement data or calculate generic/average data and transfer that
+//          Will move the original file instead for now and use that as raw data for generating new generric average data
+//          Perhaps later the raw data will be stored in sql tables
 //
 //      Transfer Organisation
 //          Insert new if not created
@@ -39,6 +41,11 @@ namespace PsadWebsite.App_Code.Repository
 {
     public class PsadData
     {
+
+        public PsadData()
+        {
+            _measurementColumns = GetSqlColumnNames(_measurementsTable);
+        }
 
         public int ImportCSVFiles()
         {
@@ -104,26 +111,24 @@ namespace PsadWebsite.App_Code.Repository
 
         private bool ImportMeasurements(List<string> filelist)
         {
-            //string[] fieldArray;
-            //string[] valueArray;
-
-            // Iterate through filelist
             foreach (string filestr in filelist)
             {
                 try
                 {
                     TextFieldParser csvReader = new TextFieldParser(filestr, System.Text.Encoding.Default);
+                    csvReader.SetDelimiters(new string[] { _delimeter });
+                    csvReader.HasFieldsEnclosedInQuotes = true;
 
-                    Dictionary<string, string> measurement = GetMeasurement(csvReader, _measurementLines);
+                    //Dictionary<string, string> measurement = GetMeasurement(csvReader, _measurementLines);
 
-                    int rows = InsertRecord(measurement, _measurementsTable);
+                    //int rows = InsertRecord(measurement, _measurementsTable);
 
-                    if (rows > 0)
+                    if (true) //(rows > 0)
                     {
                         // Possibly bring TextFieldParser out and pass it as a parameter instead of filestr.
-                        DataTable measurementData = GetMeasurementData(csvReader, _measurementLines + 1); // Get the measurement data after the measurement has been inserted into database
+                        DataTable measurementData = GetMeasurementData(csvReader, _measurementLines); // Get the measurement data after the measurement has been inserted into database
 
-
+                        float accEverage = PsadCalculation.Accelration1Average(measurementData);
                     }
 
 
@@ -145,24 +150,12 @@ namespace PsadWebsite.App_Code.Repository
         private Dictionary<string,string> GetMeasurement(TextFieldParser csvReader, int lines)
         {
             Dictionary<string, string> measurementTable = new Dictionary<string, string>();
-            List<string> sqlColumns = GetSqlColumnNames(_measurementsTable);
             List<string> excess = new List<string>();
-
-            DataTable csvData = new DataTable();
-            //int count = 0;
-            //int lines = 6; // We only look at the 6 first lines of measurement csv file for the data needed for the measurement table
-            //MaxCount += start;
 
             try
             {
                 using (csvReader)
                 {
-                    csvReader.SetDelimiters(new string[] { _delimeter });
-                    csvReader.HasFieldsEnclosedInQuotes = true;
-
-                    //List<string> fields = new List<string>();
-                    //List<int> excludedColumns = new List<int>();
-
                     for (int i = 0; i < lines; i = i + 2)
                     {
                         string[] columns = csvReader.ReadFields();
@@ -170,6 +163,9 @@ namespace PsadWebsite.App_Code.Repository
                         string[] fields = csvReader.ReadFields();
 
                         int length = 0;
+
+                        columns = shortenDelimetedLine(columns);
+                        fields = shortenToColumns(fields, columns.Length);
 
                         if (columns.Length == fields.Length)
                             length = columns.Length;
@@ -179,7 +175,7 @@ namespace PsadWebsite.App_Code.Repository
                             if (columns[j] == string.Empty || columns[j] == null)
                                 break; // Breaks loop if it hits empty column
 
-                            if (sqlColumns.Contains(columns[j])) // Only adds if column exists in sql database
+                            if (_measurementColumns.Contains(columns[j])) // Only adds if column exists in sql database
                                 measurementTable.Add(columns[j], fields[j]);
                             else
                                 excess.Add(columns[j]);
@@ -197,9 +193,45 @@ namespace PsadWebsite.App_Code.Repository
             return measurementTable;
         }
 
-        private DataTable GetMeasurementData(TextFieldParser csvReader , int startingLine)
+        private DataTable GetMeasurementData(TextFieldParser csvReader , int startingLineIndex)
         {
-            return new DataTable();
+            DataTable dt = new DataTable();
+
+            int count = 0;
+
+            int columns = 0;
+
+            while (!csvReader.EndOfData)
+            {
+                string[] fields = csvReader.ReadFields();
+
+                if (count == startingLineIndex) // Adds the columns, no sql data validation/comparison
+                {
+                    fields = shortenDelimetedLine(fields);
+                    columns = fields.Length;
+
+                    for (int i = 0; i < fields.Length; i++)
+                    {
+                        dt.Columns.Add(fields[i]);
+                    }
+                }
+                else if (count > startingLineIndex) // Adds rows of data
+                {
+                    fields = shortenToColumns(fields, columns);
+                    dt.Rows.Add(fields);
+                }
+
+                count++;
+            }
+
+            return dt;
+        }
+
+        private DataTable BasedOnSqlTable(List<string> columnNames)
+        {
+            DataTable dt = new DataTable();
+
+            return dt;
         }
 
         private List<string> GetSqlColumnNames(string table)
@@ -238,6 +270,47 @@ namespace PsadWebsite.App_Code.Repository
             return columnNames;
         }
 
+        //public cause testing
+        public void GetSqlColumnInfo(string table, out List<string> columnNames, out List<SqlDbType> dataTypes)
+        {
+            string sqlStatement = string.Format(@"SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{0}'", table);
+
+            columnNames = new List<string>();
+            dataTypes = new List<SqlDbType>();
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(_connectionString))
+                {
+                    using (SqlCommand cmd = new SqlCommand(sqlStatement, connection))
+                    {
+                        connection.Open();
+                        SqlDataReader reader = cmd.ExecuteReader();
+
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+                                columnNames.Add(reader["COLUMN_NAME"].ToString());
+                                //dataTypes.Add(reader["DATA_TYPE"]);
+
+                                //Type what = reader.ge;
+
+                            }
+                            //if (!reader.IsDBNull(i))
+
+                        }
+                        connection.Close();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.ToString());
+            }
+
+            //return columnNames;
+        }
 
         private void InsertRecord(DataTable dataTable, string sqlTable)
         {
@@ -375,12 +448,39 @@ namespace PsadWebsite.App_Code.Repository
             return args.ToArray();
         }
 
+        private string[] shortenDelimetedLine(string[] line)
+        {
+            int length = line.Length;
+            List<string> list = new List<string>();
+
+            for (int i = 0; i < length; i++)
+            {
+                if (line[i].Equals(string.Empty) == false)
+                    list.Add(line[i]);
+            }
+
+            return list.ToArray();
+        }
+
+        private string[] shortenToColumns(string[] line, int columns)
+        {
+            string[] row = new string[columns];
+
+            for (int i = 0; i < columns; i++)
+            {
+                row[i] = line[i];
+            }
+
+            return row;
+        }
+
         private CSVClass csvIO = new CSVClass();
         private static string _connectionString = ConfigurationManager.ConnectionStrings["PsadData"].ConnectionString; //@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=E:\MSSQLSERVER\HECPsadDB.mdf;Integrated Security=True;Connect Timeout=30";
         private static string _newCsvPath = "~/Data/";
         private static string _delimeter = ";";
         private static string _measurementsTable = "Measurements";
         private static int _measurementLines = 6;
+        private List<string> _measurementColumns;
     }
 
     #region OldCode

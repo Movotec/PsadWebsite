@@ -1,0 +1,5 @@
+10 aparater
+1000 målinger
+1 måling 1 mb
+
+10000 mb 
