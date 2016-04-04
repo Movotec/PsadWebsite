@@ -6,7 +6,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
-using System.Web;
+using System.Web.Hosting;
 using System.Diagnostics;
 
 
@@ -49,7 +49,7 @@ namespace PsadWebsite.App_Code.Repository
 
         public int ImportCSVFiles()
         {
-            string _measurePathHECPsad = System.Web.Hosting.HostingEnvironment.MapPath(_newCsvPath);
+            string _measurePathHECPsad = HostingEnvironment.MapPath(_newCsvPath);
             List<string> OrganisationFileList = new List<string>();
             List<string> PsadFileList = new List<string>();
             List<string> OperatorFileList = new List<string>();
@@ -119,16 +119,22 @@ namespace PsadWebsite.App_Code.Repository
                     csvReader.SetDelimiters(new string[] { _delimeter });
                     csvReader.HasFieldsEnclosedInQuotes = true;
 
-                    //Dictionary<string, string> measurement = GetMeasurement(csvReader, _measurementLines);
+                    Dictionary<string, string> measurement = GetMeasurement(csvReader, _measurementLines);
 
-                    //int rows = InsertRecord(measurement, _measurementsTable);
+                    int rows = InsertRecord(measurement, _measurementsTable);
 
-                    if (true) //(rows > 0)
+                    if (rows > 0) //(rows > 0)
                     {
                         // Possibly bring TextFieldParser out and pass it as a parameter instead of filestr.
-                        DataTable measurementData = GetMeasurementData(csvReader, _measurementLines); // Get the measurement data after the measurement has been inserted into database
+                        //DataTable measurementData = GetMeasurementData(csvReader, _measurementLines); // Get the measurement data after the measurement has been inserted into database
 
-                        float accEverage = PsadCalculation.Accelration1Average(measurementData);
+                        //float accEverage = PsadCalculation.Accelration1Average(measurementData);
+
+                        //Move file to Measurements folder, this is where all raw measurement datas will be stored
+                        string relativePath = _newCsvPath + _measurementsFolder + Path.GetFileName(filestr);
+                        string destinaition = HostingEnvironment.MapPath(relativePath);
+
+                        File.Move(filestr, destinaition);
                     }
 
 
@@ -361,7 +367,7 @@ namespace PsadWebsite.App_Code.Repository
             // This should be redone with parameters to combat sql injections
             sqlStatement = string.Format("INSERT INTO {0} ({1}) VALUES({2})", sqlTable, sqlColumns, sqlValues); 
 
-            ExecuteNonQuery(sqlStatement);
+           ExecuteNonQuery(sqlStatement);
         }
 
         private int InsertRecord(Dictionary<string,string> dict, string sqlTable)
@@ -479,6 +485,7 @@ namespace PsadWebsite.App_Code.Repository
         private static string _newCsvPath = "~/Data/";
         private static string _delimeter = ";";
         private static string _measurementsTable = "Measurements";
+        private static string _measurementsFolder = "Measurements/";
         private static int _measurementLines = 6;
         private List<string> _measurementColumns;
     }
