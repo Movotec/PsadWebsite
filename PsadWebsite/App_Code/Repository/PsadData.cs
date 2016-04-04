@@ -11,9 +11,7 @@ using System.Diagnostics;
 
 
 // To do:
-//      Transfer measurement data or calculate generic/average data and transfer that
-//          Will move the original file instead for now and use that as raw data for generating new generric average data
-//          Perhaps later the raw data will be stored in sql tables
+//      Maken even more modular by getting data types from sql tables
 //
 //      Transfer Organisation
 //          Insert new if not created
@@ -23,6 +21,10 @@ using System.Diagnostics;
 //      Transer Patient ++
 //      Transfer PSADs???
 //
+// Done:
+//      Transfer measurement data or calculate generic/average data and transfer that
+//          Will move the original file instead for now and use that as raw data for generating new generric average data
+//          Perhaps later the raw data will be stored in sql tables
 //
 
 // Ideas for optimizing:
@@ -80,17 +82,84 @@ namespace PsadWebsite.App_Code.Repository
 
             // If archive bit set add file to appropriate list (Measurements, Patients, Operators, Psads, Organisation List
 
-            ImportOrganisations(OrganisationFileList);
-            ImportPsads(PsadFileList);
-            ImportOperators(OperatorFileList);
-            ImportPatients(PatientFileList);
-            ImportMeasurements(MeasurementFileList);
+
+            ImportSingleRowFiles(OrganisationFileList, "Organisation", "Organisation/");
+
+            //ImportOrganisations(OrganisationFileList);
+            //ImportPsads(PsadFileList);
+            //ImportOperators(OperatorFileList);
+            //ImportPatients(PatientFileList);
+            //ImportMeasurements(MeasurementFileList);
 
             return 0;
         }
+        /// <summary>
+        /// Imports single row files, as in a csv file with column identifiers and 1 values for each column
+        /// </summary>
+        /// <param name="filelist">A list of the files filepaths</param>
+        /// <param name="numberOfLines">The number of lines that the key value pairs are stored on in csv file</param>
+        /// <param name="databaseTable">The name of the mssql database table to store the data from the files</param>
+        /// <param name="storageFolder">The folder placement of where the processed files will be stored</param>
+        /// <returns></returns>
+        private bool ImportSingleRowFiles(List<string> filePathList, string databaseTable, string storageFolder)
+        {
+            foreach (string filestr in filePathList)
+            {
+                try
+                {
+                    TextFieldParser csvReader = new TextFieldParser(filestr, System.Text.Encoding.Default);
+                    csvReader.SetDelimiters(new string[] { _delimeter });
+                    csvReader.HasFieldsEnclosedInQuotes = true;
 
+                    List<string> compare = GetSqlColumnNames(databaseTable);
+
+                    DataTable table = CsvToDatatable("Test", csvReader, compare);
+
+                    //Dictionary<string, string> keysAndValues = GetCsvKeysAndValues(csvReader, _measurementLines);
+
+                    int rows = InsertRecord(table, databaseTable);
+
+                    if (rows > 0) // if the insert was successefull //(rows > 0)
+                    {
+                        // Possibly bring TextFieldParser out and pass it as a parameter instead of filestr.
+                        //DataTable measurementData = GetMeasurementData(csvReader, _measurementLines); // Get the measurement data after the measurement has been inserted into database
+
+                        //float accEverage = PsadCalculation.Accelration1Average(measurementData);
+
+                        //Move file to Measurements folder, this is where all raw measurement datas will be stored
+                        string relativePath = _newCsvPath + storageFolder + Path.GetFileName(filestr);
+                        string destinaition = HostingEnvironment.MapPath(relativePath);
+
+                        File.Move(filestr, destinaition);
+                    }
+
+
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex.ToString());
+                }
+                // Just transfer to datatable where table columns are called that same as in the sql tables
+
+                //Old-B1
+            }
+
+            // Clear archive bit
+            return false;
+        }
+
+        #region redundant soon
         private bool ImportOrganisations(List<string> filelist)
         {
+            foreach (string filestr in filelist)
+            {
+                TextFieldParser csvReader = new TextFieldParser(filestr, System.Text.Encoding.Default);
+                csvReader.SetDelimiters(new string[] { _delimeter });
+                csvReader.HasFieldsEnclosedInQuotes = true;
+
+                Dictionary<string, string> organisations = GetCsvKeysAndValues(csvReader, 2); // 2 lines in organisation files
+            }
+
             return false;
         }
 
@@ -151,6 +220,121 @@ namespace PsadWebsite.App_Code.Repository
             // Clear archive bit
             return false;
         }
+        #endregion redundant soon
+
+        //Measurements read as 1 col 1 row 1 col 1 row 1 col 1 row
+        //MeausrementsData reads 1 col X row
+        // Other stuff reads as 1 col X row (typically 1 row)
+
+        // Textfieldpaser is moved through, go through meausements, then you are at measurement data and go throught that
+
+        /// <summary>
+        /// Create a DataTable based of a single row of columns and 1 to many rows of data from a Csv file
+        /// Is compared against a list of columns from an sql database
+        /// </summary>
+        /// <param name="tableName"></param>
+        /// <param name="csvReader"></param>
+        /// <param name="columnCompare"></param>
+        /// <returns>A DataTable containing data from a csv file</returns>
+        public DataTable CsvToDatatable(string tableName, TextFieldParser csvReader, List<string> columnCompare)
+        {
+            DataTable table = new DataTable(tableName);
+            int shortenedWhitespace = 0;
+
+            try
+            {
+                using (csvReader)
+                {
+                    while (!csvReader.EndOfData)
+                    {
+
+                        if (csvReader.LineNumber <= 1) //first row
+                        {
+                            string[] fields = csvReader.ReadFields();
+                            fields = shortenDelimetedLine(fields);
+                            int length = fields.Length;
+                            shortenedWhitespace = length;
+
+                            for (int i = 0; i < length; i++)
+                            {
+                                if (columnCompare.Contains(fields[i])) // check against column compare
+                                    table.Columns.Add(fields[i]); //  and add to table columns
+                            }
+                        }
+                        else
+                        {
+                            string[] fields = csvReader.ReadFields();
+                            fields = shortenToColumns(fields, shortenedWhitespace);
+                            int length = fields.Length;
+
+                            table.Rows.Add(fields);
+                        }
+                    }
+
+                    return table;
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+/////////
+//        private DataTable GetCsvData(string tableName, List<string> columnCompare, TextFieldParser csvReader, int[] columns, int[] fields)
+//        {
+//            DataTable table = new DataTable(tableName);
+//            List<string[]> allRows = new List<string[]>();
+//            int columnCount;
+
+
+//            try
+//            {
+//                using (csvReader)
+//                {
+//                    while (!csvReader.EndOfData)
+//                    {
+//                        string[] fld = csvReader.ReadFields();
+//                        allRows.Add(fld); // add alls filds to row of fields
+//                    }
+
+//                    int colLength = columns.Length;
+
+//                    for (int i = 0; i < colLength; i++) // For each row of columns
+//                    {
+//                        int rowIndex = columns[i]; // get row index
+
+//                        string[] row = allRows[rowIndex]; // get the row
+//                        row = shortenDelimetedLine(row); // remove excess whitespace ?? Possible alternative in TextFieldParser
+//                        columnCount = row.Length; // remember new row length for later
+
+//                        int rowLength = row.Length; // get the row length
+
+//                        for (int j = 0; j < rowLength; j++) // for column in row
+//                        {
+//                            if (columnCompare.Contains(row[j])) // check against column compare
+//                                table.Columns.Add(row[j]); //  and add to table columns
+
+//                        }
+//                    }
+
+//                    int fieldLength = fields.Length;
+
+//                    for (int i = 0; i < fieldLength; i++)
+//                    {
+//                        int rowIndex = fields[i];
+
+//                        string[] row = allRows
+
+//                    }                   
+//                }
+//            }
+//            catch (Exception ex)
+//            {
+
+
+//            }
+//        }
+////////
 
         // Creates a Dictionary of csv measurment file with colum names as keys and values as values
         private Dictionary<string,string> GetMeasurement(TextFieldParser csvReader, int lines)
@@ -199,6 +383,55 @@ namespace PsadWebsite.App_Code.Repository
             return measurementTable;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="csvReader"></param>
+        /// <param name="numberOfLines"></param>
+        /// <returns></returns>
+        private Dictionary<string, string> GetCsvKeysAndValues(TextFieldParser csvReader, int numberOfLines)
+        {
+            Dictionary<string, string> keysAndValues = new Dictionary<string, string>();
+            List<string> excess = new List<string>();
+
+            try
+            {
+                using (csvReader)
+                {
+                    for (int i = 0; i < numberOfLines; i = i + 2)
+                    {
+                        string[] columns = csvReader.ReadFields();
+
+                        string[] fields = csvReader.ReadFields();
+
+                        int length = 0;
+
+                        columns = shortenDelimetedLine(columns);
+                        fields = shortenToColumns(fields, columns.Length);
+
+                        if (columns.Length == fields.Length)
+                            length = columns.Length;
+
+                        for (int j = 0; j < length; j++)
+                        {
+                            if (columns[j] == string.Empty || columns[j] == null)
+                                break; // Breaks loop if it hits empty column
+
+                            if (_measurementColumns.Contains(columns[j])) // Only adds if column exists in sql database
+                                keysAndValues.Add(columns[j], fields[j]);
+                            else
+                                excess.Add(columns[j]);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Converting csv file to datatable: " + ex.ToString());
+            }
+            return keysAndValues;
+        }
+
         private DataTable GetMeasurementData(TextFieldParser csvReader , int startingLineIndex)
         {
             DataTable dt = new DataTable();
@@ -240,6 +473,11 @@ namespace PsadWebsite.App_Code.Repository
             return dt;
         }
 
+        /// <summary>
+        /// Get sql column names from a table
+        /// </summary>
+        /// <param name="table">The name of the sql table</param>
+        /// <returns>A list of the column names as strings</returns>
         private List<string> GetSqlColumnNames(string table)
         {
             string sqlStatement = string.Format(@"SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{0}'", table);
@@ -318,7 +556,7 @@ namespace PsadWebsite.App_Code.Repository
             //return columnNames;
         }
 
-        private void InsertRecord(DataTable dataTable, string sqlTable)
+        private int InsertRecord(DataTable dataTable, string sqlTable)
         {
             string sqlColumns = "";
             string sqlValues = "";
@@ -330,7 +568,7 @@ namespace PsadWebsite.App_Code.Repository
 
             foreach (DataColumn column in dataTable.Columns)
             {
-                sqlColumns += column.ColumnName;
+                sqlColumns += "[" + column.ColumnName + "]";
                 count++;
 
                 if (count < columnAmount)
@@ -345,6 +583,7 @@ namespace PsadWebsite.App_Code.Repository
             {
                 foreach (DataColumn column in dataTable.Columns)
                 {
+                    count++;
                     string val = row[column].ToString();
                     if (val == "" || val == string.Empty)
                     {
@@ -352,10 +591,22 @@ namespace PsadWebsite.App_Code.Repository
                     }
                     else
                     {
-                        sqlValues += val;
+                        float a = 0;
+                        int b = 0;
+
+                        if (float.TryParse(val, out a) || int.TryParse(val, out b))
+                        {
+                            sqlValues += val.Replace(',', '.');
+                        }
+                        //else if ()
+                        //{
+                        //    sqlValues += b;
+                        //}
+                        else
+                        {
+                            sqlValues += "'" + val + "'";
+                        }
                     }
-                   
-                    count++;
 
                     if (count < columnAmount)
                     {
@@ -367,7 +618,7 @@ namespace PsadWebsite.App_Code.Repository
             // This should be redone with parameters to combat sql injections
             sqlStatement = string.Format("INSERT INTO {0} ({1}) VALUES({2})", sqlTable, sqlColumns, sqlValues); 
 
-           ExecuteNonQuery(sqlStatement);
+            return ExecuteNonQuery(sqlStatement);
         }
 
         private int InsertRecord(Dictionary<string,string> dict, string sqlTable)

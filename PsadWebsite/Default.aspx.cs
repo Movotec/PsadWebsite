@@ -36,10 +36,8 @@ namespace PsadWebsite
         {
             PsadData data = new PsadData();
             data.ImportCSVFiles();
-            List<string> a;
-            List<SqlDbType> b;
+            //DataTable table = data.GetCvsData("");
             //data.GetSqlColumnInfo("Measurements",out a, out b);
-
             Response.Redirect(Request.RawUrl);
 
             //List<string> columns;
