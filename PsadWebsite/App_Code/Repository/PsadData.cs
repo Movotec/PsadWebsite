@@ -239,32 +239,31 @@ namespace PsadWebsite.App_Code.Repository
         public DataTable CsvToDatatable(string tableName, TextFieldParser csvReader, List<string> columnCompare)
         {
             DataTable table = new DataTable(tableName);
-            int shortenedWhitespace = 0;
+            //int shortenedWhitespace = 0;
 
             try
             {
                 using (csvReader)
                 {
-                    while (!csvReader.EndOfData)
+                    while (!csvReader.EndOfData) // Iterate through csv file
                     {
+                        string[] fields = csvReader.ReadFields();
 
-                        if (csvReader.LineNumber <= 1) //first row
+                        if (csvReader.LineNumber <= 1) // First row
                         {
-                            string[] fields = csvReader.ReadFields();
-                            fields = shortenDelimetedLine(fields);
+                            //fields = cutOutWhitespace(fields); //?
                             int length = fields.Length;
-                            shortenedWhitespace = length;
+                            //shortenedWhitespace = length;
 
                             for (int i = 0; i < length; i++)
                             {
                                 if (columnCompare.Contains(fields[i])) // check against column compare
-                                    table.Columns.Add(fields[i]); //  and add to table columns
+                                    table.Columns.Add(fields[i]); // if it exists in the other  and add to table columns
                             }
                         }
-                        else
+                        else // All other rows
                         {
-                            string[] fields = csvReader.ReadFields();
-                            fields = shortenToColumns(fields, shortenedWhitespace);
+                            //fields = shortenToColumns(fields, shortenedWhitespace);
                             int length = fields.Length;
 
                             table.Rows.Add(fields);
@@ -279,62 +278,64 @@ namespace PsadWebsite.App_Code.Repository
                 return null;
             }
         }
-/////////
-//        private DataTable GetCsvData(string tableName, List<string> columnCompare, TextFieldParser csvReader, int[] columns, int[] fields)
-//        {
-//            DataTable table = new DataTable(tableName);
-//            List<string[]> allRows = new List<string[]>();
-//            int columnCount;
+
+        
+
+        //private DataTable GetCsvData(string tableName, List<string> columnCompare, TextFieldParser csvReader, int[] columns, int[] fields)
+        //{
+        //    DataTable table = new DataTable(tableName);
+        //    List<string[]> allRows = new List<string[]>();
+        //    int columnCount;
 
 
-//            try
-//            {
-//                using (csvReader)
-//                {
-//                    while (!csvReader.EndOfData)
-//                    {
-//                        string[] fld = csvReader.ReadFields();
-//                        allRows.Add(fld); // add alls filds to row of fields
-//                    }
+        //    try
+        //    {
+        //        using (csvReader)
+        //        {
+        //            while (!csvReader.EndOfData)
+        //            {
+        //                string[] fld = csvReader.ReadFields();
+        //                allRows.Add(fld); // add alls filds to row of fields
+        //            }
 
-//                    int colLength = columns.Length;
+        //            int colLength = columns.Length;
 
-//                    for (int i = 0; i < colLength; i++) // For each row of columns
-//                    {
-//                        int rowIndex = columns[i]; // get row index
+        //            for (int i = 0; i < colLength; i++) // For each row of columns
+        //            {
+        //                int rowIndex = columns[i]; // get row index
 
-//                        string[] row = allRows[rowIndex]; // get the row
-//                        row = shortenDelimetedLine(row); // remove excess whitespace ?? Possible alternative in TextFieldParser
-//                        columnCount = row.Length; // remember new row length for later
+        //                string[] row = allRows[rowIndex]; // get the row
+        //                row = shortenDelimetedLine(row); // remove excess whitespace ?? Possible alternative in TextFieldParser
+        //                columnCount = row.Length; // remember new row length for later
 
-//                        int rowLength = row.Length; // get the row length
+        //                int rowLength = row.Length; // get the row length
 
-//                        for (int j = 0; j < rowLength; j++) // for column in row
-//                        {
-//                            if (columnCompare.Contains(row[j])) // check against column compare
-//                                table.Columns.Add(row[j]); //  and add to table columns
+        //                for (int j = 0; j < rowLength; j++) // for column in row
+        //                {
+        //                    if (columnCompare.Contains(row[j])) // check against column compare
+        //                        table.Columns.Add(row[j]); //  and add to table columns
 
-//                        }
-//                    }
+        //                }
+        //            }
 
-//                    int fieldLength = fields.Length;
+        //            int fieldLength = fields.Length;
 
-//                    for (int i = 0; i < fieldLength; i++)
-//                    {
-//                        int rowIndex = fields[i];
+        //            for (int i = 0; i < fieldLength; i++)
+        //            {
+        //                int rowIndex = fields[i];
 
-//                        string[] row = allRows
+        //                string[] row = allRows
 
-//                    }                   
-//                }
-//            }
-//            catch (Exception ex)
-//            {
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
 
 
-//            }
-//        }
-////////
+        //    }
+        //}
+        
 
         // Creates a Dictionary of csv measurment file with colum names as keys and values as values
         private Dictionary<string,string> GetMeasurement(TextFieldParser csvReader, int lines)
@@ -354,7 +355,7 @@ namespace PsadWebsite.App_Code.Repository
 
                         int length = 0;
 
-                        columns = shortenDelimetedLine(columns);
+                        columns = cutOutWhitespace(columns);
                         fields = shortenToColumns(fields, columns.Length);
 
                         if (columns.Length == fields.Length)
@@ -406,7 +407,7 @@ namespace PsadWebsite.App_Code.Repository
 
                         int length = 0;
 
-                        columns = shortenDelimetedLine(columns);
+                        columns = cutOutWhitespace(columns);
                         fields = shortenToColumns(fields, columns.Length);
 
                         if (columns.Length == fields.Length)
@@ -446,7 +447,7 @@ namespace PsadWebsite.App_Code.Repository
 
                 if (count == startingLineIndex) // Adds the columns, no sql data validation/comparison
                 {
-                    fields = shortenDelimetedLine(fields);
+                    fields = cutOutWhitespace(fields);
                     columns = fields.Length;
 
                     for (int i = 0; i < fields.Length; i++)
@@ -466,12 +467,6 @@ namespace PsadWebsite.App_Code.Repository
             return dt;
         }
 
-        private DataTable BasedOnSqlTable(List<string> columnNames)
-        {
-            DataTable dt = new DataTable();
-
-            return dt;
-        }
 
         /// <summary>
         /// Get sql column names from a table
@@ -555,6 +550,8 @@ namespace PsadWebsite.App_Code.Repository
 
             //return columnNames;
         }
+
+
 
         private int InsertRecord(DataTable dataTable, string sqlTable)
         {
@@ -705,7 +702,7 @@ namespace PsadWebsite.App_Code.Repository
             return args.ToArray();
         }
 
-        private string[] shortenDelimetedLine(string[] line)
+        private string[] cutOutWhitespace(string[] line)
         {
             int length = line.Length;
             List<string> list = new List<string>();

@@ -79,5 +79,11 @@ namespace PsadWebsite
                 PsadCalculation.Accelration1Average(measurement.MeasureGuid);
             }
         }
+
+        protected void ButtonClean_Click(object sender, EventArgs e)
+        {
+            PsadDataClean data = new PsadDataClean();
+            
+        }
     }
 }
