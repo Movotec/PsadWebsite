@@ -1,0 +1,14 @@
+CREATE TYPE [dbo].[OperatorsType] AS TABLE (
+    [RecID]          UNIQUEIDENTIFIER NOT NULL,
+    [OrganisationID] UNIQUEIDENTIFIER NULL,
+    [OperatorName]   NVARCHAR (100)   NOT NULL,
+    [Address]        NVARCHAR (100)   NULL,
+    [City]           NVARCHAR (100)   NULL,
+    [Email]          NVARCHAR (100)   NULL,
+    [Phone]          INT              NULL,
+    [Gender]         NVARCHAR (1)     NULL,
+    [Type]           NVARCHAR (1)     NULL,
+    [Status]         NVARCHAR (1)     NULL,
+    PRIMARY KEY CLUSTERED ([RecID] ASC)
+);
+

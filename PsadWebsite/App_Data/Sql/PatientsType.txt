@@ -1,0 +1,24 @@
+CREATE TABLE [dbo].[PatientsType] (
+    [RecID]           UNIQUEIDENTIFIER NOT NULL,
+    [PatientName]     NVARCHAR (100)   NOT NULL,
+    [Address]         NVARCHAR (100)   NULL,
+    [BornYear]        INT              NULL,
+    [BornMonth]       INT              NULL,
+    [BornDay]         INT              NULL,
+    [Weight]          FLOAT (53)       NULL,
+    [Height]          FLOAT (53)       NULL,
+    [Phone]           INT              NULL,
+    [Email]           NVARCHAR (100)   NULL,
+    [City]            NVARCHAR (100)   NULL,
+    [ShoeSize]        FLOAT (53)       NULL,
+    [Comment]         NTEXT            NULL,
+    [AnkleCircumSize] FLOAT (53)       NULL,
+    [Length1]         FLOAT (53)       NULL,
+    [Length2]         FLOAT (53)       NULL,
+    [FibulaLength]    FLOAT (53)       NULL,
+    [Gender]          NVARCHAR (6)     NULL,
+    [Status]          NVARCHAR (50)    NULL,
+    [Diagnostic]      NVARCHAR (50)    NULL,
+    PRIMARY KEY CLUSTERED ([RecID] ASC)
+);
+

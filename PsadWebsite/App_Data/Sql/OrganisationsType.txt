@@ -1,0 +1,12 @@
+CREATE TYPE [dbo].[OrganisationsType] AS TABLE (
+    [RecID]            UNIQUEIDENTIFIER NOT NULL,
+    [OrganisationName] NVARCHAR (100)   NOT NULL,
+    [Address]          NVARCHAR (100)   NULL,
+    [City]             NVARCHAR (100)   NULL,
+    [Phone]            INT              NULL,
+    [Contact]          NVARCHAR (100)   NULL,
+    [Email]            NVARCHAR (100)   NULL,
+    [Status]           NVARCHAR (1)     NULL,
+    PRIMARY KEY CLUSTERED ([RecID] ASC)
+);
+

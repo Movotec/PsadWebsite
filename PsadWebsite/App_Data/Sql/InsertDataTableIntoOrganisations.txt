@@ -1,0 +1,6 @@
+CREATE PROCEDURE [dbo].[InsertDataTableIntoOrganisations]
+	@dataTable OrganisationsType READONLY
+	AS
+BEGIN
+	INSERT INTO Organisations SELECT * FROM @dataTable;
+END

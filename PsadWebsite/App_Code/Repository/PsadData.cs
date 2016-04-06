@@ -475,7 +475,7 @@ namespace PsadWebsite.App_Code.Repository
         /// <returns>A list of the column names as strings</returns>
         private List<string> GetSqlColumnNames(string table)
         {
-            string sqlStatement = string.Format(@"SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{0}'", table);
+            //string sqlStatement = string.Format(@"SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{0}'", table);
 
             List<string> columnNames = new List<string>();
 
@@ -483,8 +483,11 @@ namespace PsadWebsite.App_Code.Repository
             {
                 using (SqlConnection connection = new SqlConnection(_connectionString))
                 {
-                    using (SqlCommand cmd = new SqlCommand(sqlStatement, connection))
+                    using (SqlCommand cmd = new SqlCommand("GetTableSchemaInfo", connection))
                     {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(table, SqlDbType.NVarChar);
+
                         connection.Open();
                         SqlDataReader reader = cmd.ExecuteReader();
                         

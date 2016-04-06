@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.IO;
@@ -18,7 +19,7 @@ namespace PsadWebsite.App_Code.Repository
 
         // Get table structure from sql database - DataTable
 
-        // Get column structure from csv file - List<string>
+            // Get column structure from csv file - List<string>
 
         // Fill new DataTables with data from files - DataRow
 
@@ -32,10 +33,7 @@ namespace PsadWebsite.App_Code.Repository
         public static string PatientTableName = "Patients";
         public static string MeasurentTableName = "Measurements";
         public static string Dilimiter = ";";
-
-
         public static string NewCsvPath = "~/Data/";
-
 
         private List<string> organisationFileList = new List<string>();
         private List<string> operatorFileList = new List<string>();
@@ -52,23 +50,47 @@ namespace PsadWebsite.App_Code.Repository
 
         public PsadDataClean() // Runs all code, perhaps just make this whole class a static class
         {
+            GetDataTableFromSchema();
+
+            //GetProviderFactoryClasses();
+
+            //organisationTable.TableName = OrganisationTableName;
+            //GetSchema(organisationTable);
+
+            //ProcessCsvFiles();
+
+
+        }
+
+        public void ProcessCsvFiles()
+        {
+            // Get all files from directory
             ImportCSVFiles(NewCsvPath);
 
+            // Get table structure from sql database - DataTable
             organisationTable = SqlDataTableTemplate(OrganisationTableName);
             operatorTable = SqlDataTableTemplate(OperatorTableName);
             patientTable = SqlDataTableTemplate(PatientTableName);
             measurementTable = SqlDataTableTemplate(MeasurentTableName);
 
             if (organisationTable.IsInitialized)
+            {
                 CsvFilesToDataTable(organisationFileList, organisationTable, "SomeFolder");
+
+                InsertIntoDatabase(organisationTable);
+
+            }
 
             if (measurementTable.IsInitialized)
                 CsvFilesToDataTable(measurementFileList, measurementTable, "Somefolder", 1, 2, 1, 2, 1, 2);
 
-            
-
         }
 
+        /// <summary>
+        /// Imports all csv file paths from a directory into coresponding fields.
+        /// It's a relative directory so no need for full directory path
+        /// </summary>
+        /// <param name="relativeDirectory">The directory with csv files</param>
         private void ImportCSVFiles(string relativeDirectory)
         {
             string directory = HostingEnvironment.MapPath(relativeDirectory);
@@ -95,22 +117,16 @@ namespace PsadWebsite.App_Code.Repository
             }           
         }
 
-        // If archive bit set add file to appropriate list (Measurements, Patients, Operators, Psads, Organisation List
-
-        //ImportSingleRowFiles(OrganisationFileList, "Organisation", "Organisation/");
-
-        //ImportOrganisations(OrganisationFileList);
-        //ImportPsads(PsadFileList);
-        //ImportOperators(OperatorFileList);
-        //ImportPatients(PatientFileList);
-        //ImportMeasurements(MeasurementFileList);
-
-
+        /// <summary>
+        /// Creates a DataTable based on an Sql Database Tables structure
+        /// </summary>
+        /// <param name="tableName">The name of the database table</param>
+        /// <returns></returns>
         private DataTable SqlDataTableTemplate(string tableName)
         {
-            DataTable table = new DataTable();
+            DataTable table = new DataTable(tableName);
 
-            string sqlStatement = string.Format(@"SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{0}'", tableName);
+            //string sqlStatement = string.Format(@"SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{0}'", tableName);
 
             //columnNames = new List<string>();
             //dataTypes = new List<SqlDbType>();
@@ -119,8 +135,11 @@ namespace PsadWebsite.App_Code.Repository
             {
                 using (SqlConnection connection = new SqlConnection(ConnectionString))
                 {
-                    using (SqlCommand cmd = new SqlCommand(sqlStatement, connection))
+                    using (SqlCommand cmd = new SqlCommand("GetTableSchemaInfo", connection))
                     {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(tableName, SqlDbType.NVarChar);
+
                         connection.Open();
                         SqlDataReader reader = cmd.ExecuteReader();
 
@@ -149,7 +168,133 @@ namespace PsadWebsite.App_Code.Repository
             return table;
         }
 
-        private void AddRowsToDataTable(TextFieldParser csvReader, DataTable dataTable)
+        /// <summary>
+        /// Goes through a list of csv files and adds them to a DataTable.
+        /// Once the file is hadled it is move to a storage folder.
+        /// </summary>
+        /// <param name="filePathList">A List of file paths</param>
+        /// <param name="dataTable">The DataTable that will contain the data from the csv files</param>
+        /// <param name="storageFolder">The relative directory where processed files with be stored</param>
+        /// <returns></returns>
+        private bool CsvFilesToDataTable(List<string> filePathList, DataTable dataTable, string storageFolder)
+        {
+            foreach (string filestr in filePathList) // foreach file
+            {
+                try
+                {
+                    TextFieldParser csvReader = new TextFieldParser(filestr, System.Text.Encoding.Default); // Make a filedparser with ; delimiter for csv files
+                    csvReader.SetDelimiters(new string[] { Dilimiter }); // This could possibly be turned indto a parameter
+                    csvReader.HasFieldsEnclosedInQuotes = true;
+
+                    // Transfer that field data from csv file to datatable parameter, Note the csv file structure is 1 row with columns and the rest of the rows are datarows
+                    bool success = AddRowsToDataTable(csvReader, dataTable);
+
+                    if (success)
+                    {
+                        MoveFileToStorage(filestr, storageFolder);
+                    }
+
+                    //DataTable table = CsvToDatatable("Test", csvReader, compare);
+
+                    //Dictionary<string, string> keysAndValues = GetCsvKeysAndValues(csvReader, _measurementLines);
+
+                    //int rows = InsertRecord(table, databaseTable);
+
+                    //if (rows > 0) // if the insert was successefull //(rows > 0)
+                    //{
+                    //    // Possibly bring TextFieldParser out and pass it as a parameter instead of filestr.
+                    //    //DataTable measurementData = GetMeasurementData(csvReader, _measurementLines); // Get the measurement data after the measurement has been inserted into database
+
+                    //    //float accEverage = PsadCalculation.Accelration1Average(measurementData);
+
+                    //    //Move file to Measurements folder, this is where all raw measurement datas will be stored
+                    //    string relativePath = NewCsvPath + storageFolder + Path.GetFileName(filestr);
+                    //    string destinaition = HostingEnvironment.MapPath(relativePath);
+
+                    //    File.Move(filestr, destinaition);
+                    //}
+
+
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex.ToString());
+                }
+                // Just transfer to datatable where table columns are called that same as in the sql tables
+
+                //Old-B1
+            }
+
+            // Clear archive bit
+            return false;
+        }
+
+        /// <summary>
+        /// Goes through a list of csv files and adds them to a DataTable.
+        /// Once the file is hadled it is move to a storage folder.
+        /// 
+        /// The structure of the csv files must be:
+        /// Multiple lines of columns names that translate to 1 row
+        /// Multiple lines of values that translate to 1 row
+        /// The structure of which line in the csv file is a column or values is:
+        /// Skip = 0;
+        /// Column = 1;
+        /// Value = 2;
+        /// </summary>
+        /// <param name="filePathList">A List of file paths</param>
+        /// <param name="dataTable">The DataTable that will contain the data from the csv files</param>
+        /// <param name="storageFolder">The relative directory where processed files with be stored</param>
+        /// <param name="columnValueStructure">Pass integers for where columns and values lines are located, Skip a line with 0, add Column line with 1, add Value line with 2</param>
+        /// <returns></returns>
+        private bool CsvFilesToDataTable(List<string> filePathList, DataTable dataTable, string storageFolder, params int[] columnValueStructure)
+        {
+            foreach (string filestr in filePathList) // foreach file
+            {
+                try
+                {
+                    TextFieldParser csvReader = new TextFieldParser(filestr, System.Text.Encoding.Default); // Make a filedparser with ; delimiter for csv files
+                    csvReader.SetDelimiters(new string[] { Dilimiter }); // This could possibly be turned indto a parameter
+                    csvReader.HasFieldsEnclosedInQuotes = true;
+
+                    // Transfer that field data from csv file to datatable parameter, Note the csv file structure is 1 row with columns and the rest of the rows are datarows
+                    bool success = AddMultiLineColumnValueRowToDataTable(csvReader, dataTable, columnValueStructure);
+
+                    if (success)
+                    {
+                        MoveFileToStorage(filestr, storageFolder);
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex.ToString());
+                }
+
+            }
+            return false;
+        }
+
+        // If archive bit set add file to appropriate list (Measurements, Patients, Operators, Psads, Organisation List
+
+        //ImportSingleRowFiles(OrganisationFileList, "Organisation", "Organisation/");
+
+        //ImportOrganisations(OrganisationFileList);
+        //ImportPsads(PsadFileList);
+        //ImportOperators(OperatorFileList);
+        //ImportPatients(PatientFileList);
+        //ImportMeasurements(MeasurementFileList);
+
+      
+        /// <summary>
+        /// Add rows from a csv file to a DataTable.
+        /// Will only add values where the csv files and DataTables column names are both present.
+        /// The structure of the csv file must be:
+        /// 1 row of Column names
+        /// 1 to many row of Values
+        /// </summary>
+        /// <param name="csvReader">A TextFieldsParser of the csv file</param>
+        /// <param name="dataTable">The DataTable you wish to add the rows to</param>
+        private bool AddRowsToDataTable(TextFieldParser csvReader, DataTable dataTable)
         {
             List<string> columns = new List<string>();
             List<int> removedColumns = new List<int>();
@@ -178,15 +323,31 @@ namespace PsadWebsite.App_Code.Repository
                     }
 
                 }
+
+                return true;
             }
             catch (Exception ex)
             {
+                return false;
             }
 
         }
 
-                                                                                            // string "column" "value" / 1, 2
-        private void AddMultiLineColumnValueRowToDataTable(TextFieldParser csvReader, DataTable datatable, params int[] columnValueStructure) // [1] {2} | [3] {4,5}
+        /// <summary>
+        /// Adds rows from a csv file to a DataTable.
+        /// Will only add values where the csv files and DataTables column names are both present.
+        /// The structure of the csv file must be:
+        /// Multiple lines of columns names that translate to 1 row
+        /// Multiple lines of values that translate to 1 row
+        /// The structure of which line in the csv file is a column or values is:
+        /// Skip = 0;
+        /// Column = 1;
+        /// Value = 2;
+        /// </summary>
+        /// <param name="csvReader">A TextFieldsParser of the csv file</param>
+        /// <param name="dataTable">The DataTable you wish to add the rows to</param>
+        /// <param name="columnValueStructure">Pass integers for where columns and values lines are located, Skip a line with 0, add Column line with 1, add Value line with 2</param>
+        private bool AddMultiLineColumnValueRowToDataTable(TextFieldParser csvReader, DataTable datatable, params int[] columnValueStructure)
         {
             List<string> columns = new List<string>();
             List<int> removedColumns = new List<int>();
@@ -224,10 +385,12 @@ namespace PsadWebsite.App_Code.Repository
                     columns = GetFieldsAsColumns(columns, datatable, removedColumns);
                     GetFieldsAsValuesToRow(values, datatable, columns, removedColumns);
                 }
+                return true;
             }
             catch (Exception ex)
             {
-
+                Debug.WriteLine(ex.Message);
+                return false;
             }
 
         }
@@ -262,12 +425,12 @@ namespace PsadWebsite.App_Code.Repository
         }
 
         /// <summary>
-        /// 
+        /// Takes a list of fields interperts them as values and adds them to a Datatable as a DataRow
         /// </summary>
-        /// <param name="csvReader"></param>
-        /// <param name="dataTable"></param>
-        /// <param name="columns"></param>
-        /// <param name="removedColumns"></param>
+        /// <param name="fields">The list of fields that are interperted as values</param>
+        /// <param name="dataTable">The DataTble to add the DataRow</param>
+        /// <param name="columns">The column structure of the values</param>
+        /// <param name="removedColumns">The removed columns which are not a part of the DataTable</param>
         private void GetFieldsAsValuesToRow(List<string> fields, DataTable dataTable, List<string> columns, List<int> removedColumns)
         {
             DataRow row = dataTable.NewRow();
@@ -276,7 +439,7 @@ namespace PsadWebsite.App_Code.Repository
 
             for (int i = 0; i < length; i++) // Removes exluded columns
             {
-                values.RemoveAt(removedColumns[i]);
+                values.RemoveAt(removedColumns[i] - i);
             }
 
             int newLength = values.Count;
@@ -289,76 +452,117 @@ namespace PsadWebsite.App_Code.Repository
             dataTable.Rows.Add(row);
         }
 
-        private bool CsvFilesToDataTable(List<string> filePathList, DataTable dataTable, string storageFolder)
+        #region DataBaseHandling
+        private int InsertIntoDatabase(DataTable dataTable)
         {
-            foreach (string filestr in filePathList) // foreach file
+            string storedProcedure = "InsertDataTableInto" + dataTable.TableName;
+            int rows = 0;
+
+            try
             {
-                try
+                using (SqlConnection conn = new SqlConnection(ConnectionString))
                 {
-                    TextFieldParser csvReader = new TextFieldParser(filestr, System.Text.Encoding.Default); // Make a filedparser with ; delimiter for csv files
-                    csvReader.SetDelimiters(new string[] { Dilimiter }); // This could possibly be turned indto a parameter
-                    csvReader.HasFieldsEnclosedInQuotes = true;
+                    using (SqlCommand cmd = new SqlCommand(storedProcedure, conn))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
 
-                    // Transfer that field data from csv file to datatable parameter, Note the csv file structure is 1 row with columns and the rest of the rows are datarows
-                    AddRowsToDataTable(csvReader, dataTable);
+                        // I'm trying to pass the DataTable with DataRows full of data into it's Corresponding Table. But it seems that the DataTypes have to be the same (I think the DataTables are set to string)
+                        //Either i do this by looping through it in SqlDataTableTemplate() or i do something smarter
+                        // I'm trying to figure out how to copy the structure from the various Tables into the DataTable as cleanly and 1to1 as possible
+                        // Something that has promise is DbDataAdapter.FillSchema(); but it's quite mischivious
+                        SqlParameter table = new SqlParameter("@dataTable", dataTable);
+                        cmd.Parameters.Add(table);
 
-                    //DataTable table = CsvToDatatable("Test", csvReader, compare);
-
-                    //Dictionary<string, string> keysAndValues = GetCsvKeysAndValues(csvReader, _measurementLines);
-
-                    //int rows = InsertRecord(table, databaseTable);
-
-                    //if (rows > 0) // if the insert was successefull //(rows > 0)
-                    //{
-                    //    // Possibly bring TextFieldParser out and pass it as a parameter instead of filestr.
-                    //    //DataTable measurementData = GetMeasurementData(csvReader, _measurementLines); // Get the measurement data after the measurement has been inserted into database
-
-                    //    //float accEverage = PsadCalculation.Accelration1Average(measurementData);
-
-                    //    //Move file to Measurements folder, this is where all raw measurement datas will be stored
-                    //    string relativePath = NewCsvPath + storageFolder + Path.GetFileName(filestr);
-                    //    string destinaition = HostingEnvironment.MapPath(relativePath);
-
-                    //    File.Move(filestr, destinaition);
-                    //}
-
-
+                        conn.Open();
+                        rows = cmd.ExecuteNonQuery();
+                        conn.Close();
+                    }
                 }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine(ex.ToString());
-                }
-                // Just transfer to datatable where table columns are called that same as in the sql tables
-
-                //Old-B1
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
             }
 
-            // Clear archive bit
-            return false;
+            return rows;
         }
 
-        private bool CsvFilesToDataTable(List<string> filePathList, DataTable dataTable, string storageFolder, params int[] columnValueStructure)
+        private DataTable GetSchemaSomehow(DataTable dataTable)
         {
-            foreach (string filestr in filePathList) // foreach file
+
+            string sqlStatement = "GetTableSchemaInfo";
+
+            try
             {
-                try
+                using (SqlConnection connection = new SqlConnection(ConnectionString))
                 {
-                    TextFieldParser csvReader = new TextFieldParser(filestr, System.Text.Encoding.Default); // Make a filedparser with ; delimiter for csv files
-                    csvReader.SetDelimiters(new string[] { Dilimiter }); // This could possibly be turned indto a parameter
-                    csvReader.HasFieldsEnclosedInQuotes = true;
+                    using (SqlCommand cmd = new SqlCommand(sqlStatement, connection))
+                    {
+                        SqlDataAdapter adap = new SqlDataAdapter(cmd);
 
-                    // Transfer that field data from csv file to datatable parameter, Note the csv file structure is 1 row with columns and the rest of the rows are datarows
-                    AddMultiLineColumnValueRowToDataTable(csvReader, dataTable, columnValueStructure);
+                         return adap.FillSchema(dataTable, SchemaType.Mapped);
 
-
+                    }
                 }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine(ex.ToString());
-                }
-  
             }
-            return false;
+            catch (Exception ex)
+            {
+                return null;
+            }
+
+
+        }
+
+        private DataTable GetDataTableFromSchema()
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(ConnectionString))
+                {
+                    //using (SqlCommand cmd = new SqlCommand(sqlStatement, connection))
+                    //{
+                    //}
+                    connection.Open();
+                    DataTable table = connection.GetSchema("Tables");
+                    connection.Close();
+
+                    return table;
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        private static DataTable GetProviderFactoryClasses()
+        {
+            // Retrieve the installed providers and factories.
+            DataTable table = DbProviderFactories.GetFactoryClasses();
+
+            // Display each row and column value.
+            foreach (DataRow row in table.Rows)
+            {
+                foreach (DataColumn column in table.Columns)
+                {
+                    Console.WriteLine(row[column]);
+                }
+            }
+            return table;
+        }
+        #endregion DataBaseHandling
+
+        /// <summary>
+        /// Moves a proccessed file to a storage folder
+        /// </summary>
+        /// <param name="file">The full file path</param>
+        /// <param name="storageFolder">The relative folder name where the file will be stored, must be a child of this directory</param>
+        private void MoveFileToStorage(string file, string storageFolder)
+        {
+            string relativePath = NewCsvPath + storageFolder + Path.GetFileName(file);
+            string destination = HostingEnvironment.MapPath(relativePath);
+
+            File.Move(file, destination);
         }
     }
 }

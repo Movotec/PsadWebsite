@@ -1,0 +1,5 @@
+CREATE TYPE [dbo].[TableType] AS TABLE
+(
+	[Id] INT NOT NULL,
+	[Name] [nvarchar](128) NULL
+)
