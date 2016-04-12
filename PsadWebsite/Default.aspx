@@ -113,7 +113,7 @@
 
         <asp:Button ID="ButtonClean" runat="server" Text="PsadDataClean" OnClick="ButtonClean_Click" />
 
-        <asp:Button ID="ButtonCsvToSql" runat="server" Text="Transfer csv data to sql" OnClick="ButtonCsvToSql_Click" />
+        <asp:Button ID="ButtonReset" runat="server" Text="Reset: CleanseDb and move files back to data folder" OnClick="ButtonReset_Click" />
 
         <asp:Button ID="ButtonEntityFramework" runat="server" Text="Create Measurement with fake data via Entity framework" OnClick="ButtonEntityFramework_Click" />
     </div>

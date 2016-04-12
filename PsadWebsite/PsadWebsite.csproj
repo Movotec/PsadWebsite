@@ -399,8 +399,9 @@
     <Compile Include="App_Code\EnitityModels\Organisation.cs" />
     <Compile Include="App_Code\EnitityModels\Patients.cs" />
     <Compile Include="App_Code\EnitityModels\PsadDatabase.cs" />
-    <Content Include="App_Code\Repository\IISHandler1.cs" />
-    <Compile Include="App_Code\Repository\PsadDataClean.cs" />
+    <Compile Include="App_Code\Repository\ResetScript.cs" />
+    <Compile Include="App_Code\Repository\SqlHandler.cs" />
+    <Compile Include="App_Code\Repository\PsadData.cs" />
     <Compile Include="App_Code\SearchHandler.cs" />
     <Compile Include="App_Code\Repository\CSVClass.cs" />
     <Compile Include="App_Code\Repository\DataRepository.cs" />
@@ -408,7 +409,7 @@
     <Compile Include="App_Code\Repository\PsadCalculation.cs" />
     <Compile Include="App_Code\Repository\PsadMeasureInfo.cs" />
     <Compile Include="App_Code\Repository\PsadMeasureResult.cs" />
-    <Compile Include="App_Code\Repository\PsadData.cs" />
+    <Compile Include="App_Code\Repository\PsadDataOld.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="About.aspx.cs">
       <DependentUpon>About.aspx</DependentUpon>

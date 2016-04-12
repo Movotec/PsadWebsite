@@ -32,19 +32,6 @@ namespace PsadWebsite
        
         }
 
-        protected void ButtonCsvToSql_Click(object sender, EventArgs e)
-        {
-            PsadData data = new PsadData();
-            data.ImportCSVFiles();
-            //DataTable table = data.GetCvsData("");
-            //data.GetSqlColumnInfo("Measurements",out a, out b);
-            Response.Redirect(Request.RawUrl);
-
-            //List<string> columns;
-            //columns = data.GetSqlColumnNames("Measurements");
-            //string val = columns[3];
-        }
-
         protected void ButtonEntityFramework_Click(object sender, EventArgs e)
         {
             using (var db = new PsadDatabase())
@@ -82,8 +69,13 @@ namespace PsadWebsite
 
         protected void ButtonClean_Click(object sender, EventArgs e)
         {
-            PsadDataClean data = new PsadDataClean();
+            PsadData data = new PsadData();
             
+        }
+
+        protected void ButtonReset_Click(object sender, EventArgs e)
+        {
+            ResetScript.Reset();
         }
     }
 }
