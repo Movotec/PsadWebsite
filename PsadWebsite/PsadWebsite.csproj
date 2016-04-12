@@ -399,6 +399,7 @@
     <Compile Include="App_Code\EnitityModels\Organisation.cs" />
     <Compile Include="App_Code\EnitityModels\Patients.cs" />
     <Compile Include="App_Code\EnitityModels\PsadDatabase.cs" />
+    <Content Include="App_Code\Repository\IISHandler1.cs" />
     <Compile Include="App_Code\Repository\PsadDataClean.cs" />
     <Compile Include="App_Code\SearchHandler.cs" />
     <Compile Include="App_Code\Repository\CSVClass.cs" />

@@ -1,0 +1,3 @@
+CREATE PROCEDURE [dbo].[GetOperatorsTop0]
+AS
+SELECT TOP 0 * FROM Operators

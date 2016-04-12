@@ -50,17 +50,19 @@ namespace PsadWebsite.App_Code.Repository
 
         public PsadDataClean() // Runs all code, perhaps just make this whole class a static class
         {
-            GetDataTableFromSchema();
+            //DataTable data = GetSchema("GetOrganisationsTop0");//"GetOrganisationsTop1");
+            //GetDataTableFromSchema();
 
             //GetProviderFactoryClasses();
 
             //organisationTable.TableName = OrganisationTableName;
             //GetSchema(organisationTable);
 
-            //ProcessCsvFiles();
+            ProcessCsvFiles();
 
 
         }
+
 
         public void ProcessCsvFiles()
         {
@@ -68,21 +70,25 @@ namespace PsadWebsite.App_Code.Repository
             ImportCSVFiles(NewCsvPath);
 
             // Get table structure from sql database - DataTable
-            organisationTable = SqlDataTableTemplate(OrganisationTableName);
-            operatorTable = SqlDataTableTemplate(OperatorTableName);
-            patientTable = SqlDataTableTemplate(PatientTableName);
-            measurementTable = SqlDataTableTemplate(MeasurentTableName);
+            organisationTable = GetEmptyDatabaseTable(OrganisationTableName);
+            operatorTable = GetEmptyDatabaseTable(OperatorTableName);
+            patientTable = GetEmptyDatabaseTable(PatientTableName);
+            measurementTable = GetEmptyDatabaseTable(MeasurentTableName);
 
             if (organisationTable.IsInitialized)
             {
-                CsvFilesToDataTable(organisationFileList, organisationTable, "SomeFolder");
+                // Takes all the organisation csv files and transfers them to the organisation data table
+                CsvFilesToDataTable(organisationFileList, organisationTable, OrganisationTableName);
 
-                InsertIntoDatabase(organisationTable);
+                //InsertIntoDatabase(organisationTable);
+                //IntsertIntoDbByAdapter(organisationTable);
 
+                // Inserts all data from the various DataTables into corresponding database table
+                InsertBulkCopy(organisationTable);
             }
 
-            if (measurementTable.IsInitialized)
-                CsvFilesToDataTable(measurementFileList, measurementTable, "Somefolder", 1, 2, 1, 2, 1, 2);
+            //if (measurementTable.IsInitialized)
+            //    CsvFilesToDataTable(measurementFileList, measurementTable, "Somefolder", 1, 2, 1, 2, 1, 2);
 
         }
 
@@ -118,54 +124,36 @@ namespace PsadWebsite.App_Code.Repository
         }
 
         /// <summary>
-        /// Creates a DataTable based on an Sql Database Tables structure
+        /// Gets an empty DataTable structered as a database table
         /// </summary>
-        /// <param name="tableName">The name of the database table</param>
-        /// <returns></returns>
-        private DataTable SqlDataTableTemplate(string tableName)
+        /// <param name="storedProcedure">The stored procedure to get table structure, does not need to return rows since it's just the column structure and datatypes that are needed</param>
+        /// <returns>A DataTable with the structure of a database table</returns>
+        public DataTable GetEmptyDatabaseTable(string tableName)
         {
-            DataTable table = new DataTable(tableName);
-
-            //string sqlStatement = string.Format(@"SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{0}'", tableName);
-
-            //columnNames = new List<string>();
-            //dataTypes = new List<SqlDbType>();
 
             try
             {
                 using (SqlConnection connection = new SqlConnection(ConnectionString))
                 {
-                    using (SqlCommand cmd = new SqlCommand("GetTableSchemaInfo", connection))
+                    using (SqlCommand cmd = new SqlCommand(GetTableProcedure(tableName), connection))
                     {
-                        cmd.CommandType = CommandType.StoredProcedure;
-                        cmd.Parameters.Add(tableName, SqlDbType.NVarChar);
-
-                        connection.Open();
-                        SqlDataReader reader = cmd.ExecuteReader();
-
-                        if (reader.HasRows)
+                        using (SqlDataAdapter adap = new SqlDataAdapter(cmd))
                         {
-                            while (reader.Read())
-                            {
-
-                                table.Columns.Add(reader["COLUMN_NAME"].ToString());
-
-
-                                //dataTypes.Add(reader["DATA_TYPE"]);
-
-
-                            }
+                            cmd.CommandType = CommandType.StoredProcedure;
+                            connection.Open();
+                            DataTable dataTable = new DataTable(tableName);
+                            adap.Fill(dataTable);
+                            connection.Close();
+                            return dataTable;
                         }
-                        connection.Close();
                     }
                 }
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.ToString());
+                return null;
             }
-
-            return table;
         }
 
         /// <summary>
@@ -273,17 +261,6 @@ namespace PsadWebsite.App_Code.Repository
             }
             return false;
         }
-
-        // If archive bit set add file to appropriate list (Measurements, Patients, Operators, Psads, Organisation List
-
-        //ImportSingleRowFiles(OrganisationFileList, "Organisation", "Organisation/");
-
-        //ImportOrganisations(OrganisationFileList);
-        //ImportPsads(PsadFileList);
-        //ImportOperators(OperatorFileList);
-        //ImportPatients(PatientFileList);
-        //ImportMeasurements(MeasurementFileList);
-
       
         /// <summary>
         /// Add rows from a csv file to a DataTable.
@@ -446,13 +423,65 @@ namespace PsadWebsite.App_Code.Repository
             for (int i = 0; i < newLength; i++)
             {
                 string column = columns[i]; // Gets column name
-                row[column] = values[i];
+                string value = values[i];
+                if (value != string.Empty && value != null)
+                    row[column] = value;
             }
 
             dataTable.Rows.Add(row);
         }
 
         #region DataBaseHandling
+
+        /// <summary>
+        /// Inserts data from DataTable
+        /// </summary>
+        /// <param name="dataTable">The DataTable with new data to be inserted into an sql database table</param>
+        private void InsertBulkCopy(DataTable dataTable)
+        {
+            try
+            {
+                using (SqlBulkCopy bulk = new SqlBulkCopy(ConnectionString, SqlBulkCopyOptions.KeepNulls))
+                {
+                    foreach (DataColumn col in dataTable.Columns)
+                    {
+                        string column = col.ColumnName;
+                        bulk.ColumnMappings.Add(column, column);
+                    }
+
+                    bulk.BulkCopyTimeout = 600;
+                    bulk.DestinationTableName = dataTable.TableName;
+                    // To insert there must only be new data, if it finds any rows that contain an already excisiting RecId it will throw an exception
+                    bulk.WriteToServer(dataTable);
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+        }
+
+        private void IntsertIntoDbByAdapter(DataTable dataTable)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(ConnectionString))
+                {
+                    using (SqlDataAdapter adap = new SqlDataAdapter())
+                    {
+                        connection.Open();
+                        adap.Update(dataTable);
+                        connection.Close();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.ToString());
+            }
+        }
+
         private int InsertIntoDatabase(DataTable dataTable)
         {
             string storedProcedure = "InsertDataTableInto" + dataTable.TableName;
@@ -487,6 +516,58 @@ namespace PsadWebsite.App_Code.Repository
             return rows;
         }
 
+
+        /// <summary>
+        /// Creates a DataTable based on an Sql Database Tables structure
+        /// </summary>
+        /// <param name="tableName">The name of the database table</param>
+        /// <returns></returns>
+        private DataTable SqlDataTableTemplate(string tableName)
+        {
+            DataTable table = new DataTable(tableName);
+
+            //string sqlStatement = string.Format(@"SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{0}'", tableName);
+
+            //columnNames = new List<string>();
+            //dataTypes = new List<SqlDbType>();
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(ConnectionString))
+                {
+                    using (SqlCommand cmd = new SqlCommand("GetTableSchemaInfo", connection))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(tableName, SqlDbType.NVarChar);
+
+                        connection.Open();
+                        SqlDataReader reader = cmd.ExecuteReader();
+
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+
+                                table.Columns.Add(reader["COLUMN_NAME"].ToString());
+
+
+                                //dataTypes.Add(reader["DATA_TYPE"]);
+
+
+                            }
+                        }
+                        connection.Close();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.ToString());
+            }
+
+            return table;
+        }
+
         private DataTable GetSchemaSomehow(DataTable dataTable)
         {
 
@@ -509,9 +590,33 @@ namespace PsadWebsite.App_Code.Repository
             {
                 return null;
             }
+            //// You can specify the Catalog, Schema, Table Name, Table Type to get 
+            //// the specified table(s).
+            //// You can use four restrictions for Table, so you should create a 4 members array.
+            //string[] restrictions = new string[4];
+            //// For the array, 0 - member represents Catalog; 1 - member represents Schema;
+            //// 2-member represents Table Name; 3-member represents Table Type. 
+            //// Now we specify the Table Name of the table what we want to get schema information.
+            //restrictions[2] = table;
+
+            //try
+            //{
+            //    using (SqlConnection connection = new SqlConnection(ConnectionString))
+            //    {
+            //        connection.Open();
+            //        DataTable dataTable = connection.GetSchema("Tables", restrictions);
+            //        connection.Close();
+            //        return dataTable;
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    return null;
+            //}
 
 
         }
+
 
         private DataTable GetDataTableFromSchema()
         {
@@ -553,13 +658,29 @@ namespace PsadWebsite.App_Code.Repository
         #endregion DataBaseHandling
 
         /// <summary>
+        /// String format for the GetEmptyDatabaseTable() stored procedure
+        /// </summary>
+        /// <param name="tableName">The tablename for the storedprocedure</param>
+        /// <returns>A string of the format "Get{0}Top0" where {0} = tableName </returns>
+        private string GetTableProcedure(string tableName)
+        {
+            return string.Format("Get{0}Top0",tableName);
+        }
+
+        //private string GetStoragePath(string relativeFolder)
+        //{
+        //    return NewCsvPath + relativeFolder;
+        //}
+
+
+        /// <summary>
         /// Moves a proccessed file to a storage folder
         /// </summary>
         /// <param name="file">The full file path</param>
         /// <param name="storageFolder">The relative folder name where the file will be stored, must be a child of this directory</param>
         private void MoveFileToStorage(string file, string storageFolder)
         {
-            string relativePath = NewCsvPath + storageFolder + Path.GetFileName(file);
+            string relativePath = NewCsvPath + storageFolder + "\\" + Path.GetFileName(file);
             string destination = HostingEnvironment.MapPath(relativePath);
 
             File.Move(file, destination);
