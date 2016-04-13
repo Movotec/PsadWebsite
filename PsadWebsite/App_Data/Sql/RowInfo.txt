@@ -1,0 +1,1 @@
+DBCC showcontig ('MeasurementData') with tableresults

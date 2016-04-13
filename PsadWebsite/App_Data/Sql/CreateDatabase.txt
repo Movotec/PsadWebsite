@@ -100,9 +100,9 @@ CREATE TABLE [Operators] (
   [City] nvarchar(100) ,
   [Email] nvarchar(100) ,
   [Phone] int ,
-  [Gender] nvarchar ,
-  [Type] nvarchar ,
-  [Status] nvarchar , 
+  [Gender] nvarchar(50) ,
+  [Type] nvarchar(50) ,
+  [Status] nvarchar(50) , 
  PRIMARY KEY ([RecID])
 ) ON [PRIMARY]
 GO
@@ -163,7 +163,7 @@ CREATE TABLE [Patients] (
   [Length1] float ,
   [Length2] float ,
   [FibulaLength] float ,
-  [Gender] nvarchar(6) ,
+  [Gender] nvarchar(50) ,
   [Status] nvarchar(50) ,
   [Diagnostic] nvarchar(50)  -- Should be foreign table, 
  PRIMARY KEY ([RecID])

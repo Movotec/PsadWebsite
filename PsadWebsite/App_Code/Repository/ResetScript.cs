@@ -7,6 +7,7 @@ using System.Web.Hosting;
 
 namespace PsadWebsite.App_Code.Repository
 {
+    // Also needs file check, perhaps abstract that to another helper class
     public static class ResetScript
     {
         public static string NewCsvPath = "~/Data/";
@@ -16,7 +17,7 @@ namespace PsadWebsite.App_Code.Repository
         public static string MeasurentTableName = "Measurements";
 
 
-        private static List<string> organisationFileList = new List<string>();
+        private static List<string> orgFileList = new List<string>();
         private static List<string> operatorFileList = new List<string>();
         private static List<string> patientFileList = new List<string>();
         private static List<string> measurementFileList = new List<string>();
@@ -29,7 +30,7 @@ namespace PsadWebsite.App_Code.Repository
             ImportCSVFiles(NewCsvPath + PatientTableName);
             ImportCSVFiles(NewCsvPath + MeasurentTableName);
 
-            MoveFiles(organisationFileList);
+            MoveFiles(orgFileList);
             MoveFiles(operatorFileList);
             MoveFiles(patientFileList);
             MoveFiles(measurementFileList);
@@ -41,8 +42,10 @@ namespace PsadWebsite.App_Code.Repository
         {
             string relativePath = NewCsvPath + Path.GetFileName(file);
             string destination = HostingEnvironment.MapPath(relativePath);
-
-            File.Move(file, destination);
+            if (File.Exists(file))
+            {
+                File.Move(file, destination);
+            }
         }
 
         private static void MoveFiles(List<string> list)
@@ -62,7 +65,7 @@ namespace PsadWebsite.App_Code.Repository
                 if ((File.GetAttributes(filestr) & FileAttributes.Archive) == FileAttributes.Archive)
                 {
                     if (filestr.Contains("Organisations_"))
-                        organisationFileList.Add(filestr);
+                        orgFileList.Add(filestr);
 
                     else if (filestr.Contains("Measurement_"))
                         measurementFileList.Add(filestr);

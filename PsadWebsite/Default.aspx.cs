@@ -69,7 +69,7 @@ namespace PsadWebsite
 
         protected void ButtonClean_Click(object sender, EventArgs e)
         {
-            PsadData data = new PsadData();
+            PsadData data = new PsadData(true);
             
         }
 
