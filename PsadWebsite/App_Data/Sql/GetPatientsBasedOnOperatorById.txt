@@ -1,0 +1,4 @@
+CREATE PROCEDURE [dbo].[GetPatientsBasedOnOperatorById]
+	@operatorId UniqueIdentifier
+AS
+	SELECT  FROM Operators AS o WHERE o.RecID = @operatorId 

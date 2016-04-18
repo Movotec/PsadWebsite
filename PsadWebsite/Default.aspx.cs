@@ -10,6 +10,7 @@ using System.Data;
 using PsadWebsite.App_Code.Repository;
 using PsadWebsite.App_Code.EnitityModels;
 using System.Diagnostics;
+using PsadWebsite.App_Code;
 
 namespace PsadWebsite
 {
@@ -17,6 +18,9 @@ namespace PsadWebsite
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+
+            DataTable datatable = SearchHandler.GetPatientsBasedOnOpereator("Johan");
+
             //SqlCommand cmd = new SqlCommand();
             //SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["EIPsad"].ConnectionString);
             //cmd.Connection = conn;

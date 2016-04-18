@@ -67,5 +67,39 @@ namespace PsadWebsite.App_Code.Repository
             }
             
         }
+
+        public static DataTable QueryDataTable(string commmandtext, params SqlParameter[] parameters)
+        {
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                using (SqlCommand cmd = new SqlCommand(commmandtext, conn))
+                {
+                    using (SqlDataAdapter adap = new SqlDataAdapter(cmd))
+                    {
+                        DataTable dataTable = new DataTable();
+
+                        try
+                        {
+                            cmd.Parameters.AddRange(parameters);
+                            cmd.CommandType = CommandType.StoredProcedure;
+                            conn.Open();
+                            adap.Fill(dataTable);
+                        }
+                        catch (Exception ex)
+                        {
+
+
+                        }
+                        finally
+                        {
+                            conn.Close();
+                        }
+
+                        return dataTable;
+                    }
+
+                }
+            }
+        }
     }
 }

@@ -7,7 +7,6 @@ using System.Web.Security;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Microsoft.AspNet.Identity;
-
 namespace PsadWebsite
 {
     public partial class SiteMaster : MasterPage
@@ -80,6 +79,15 @@ namespace PsadWebsite
         protected void Unnamed_LoggingOut(object sender, LoginCancelEventArgs e)
         {
             Context.GetOwinContext().Authentication.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+        }
+
+        protected void ButtonSearch_Click(object sender, EventArgs e)
+        {
+            while (true)
+            {
+                //Text
+                //GetPatient(); //.... lots of different simples queries for that small stuff
+            }
         }
     }
 

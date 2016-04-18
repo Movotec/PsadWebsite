@@ -71,9 +71,11 @@
                             <div class="input-group">
                                 <input type="text" class="form-control movo-bg-grey" placeholder="Search for...">
                                 <span class="input-group-btn">
-                                    <button class="btn btn-default movo-bg-orange" type="button">
+                                    <asp:Button ID="ButtonSearch" runat="server" Text="Button" CssClass="btn btn-default movo-bg-orange" OnClick="ButtonSearch_Click" >
+                                    <%--<button class="btn btn-default movo-bg-orange" type="button"">--%>
                                         <span class="glyphicon glyphicon-search"></span>
-                                    </button>
+<%--                                    </ button>--%>
+                                    </asp:Button>
                                 </span>
                             </div><!-- /input-group -->
                         </li>

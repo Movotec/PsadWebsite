@@ -111,7 +111,7 @@
         <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS, and JavaScript.</p>
         <p><a href="http://www.asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
 
-        <asp:Button ID="ButtonClean" runat="server" Text="PsadDataClean" OnClick="ButtonClean_Click" />
+        <asp:Button ID="ButtonClean" runat="server" Text="PsadData Import to sql" OnClick="ButtonClean_Click" />
 
         <asp:Button ID="ButtonReset" runat="server" Text="Reset: CleanseDb and move files back to data folder" OnClick="ButtonReset_Click" />
 

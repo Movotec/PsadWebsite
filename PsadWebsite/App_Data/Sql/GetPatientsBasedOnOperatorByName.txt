@@ -1,0 +1,8 @@
+CREATE PROCEDURE [dbo].[GetPatientsBasedOnOperatorByName]
+	@operatorName nvarchar (50)
+AS
+	SELECT * FROM Patients AS p 
+	LEFT JOIN Measurements AS m ON p.RecID = m.PatientGuid
+	LEFT JOIN Operators AS o ON m.PatientGuid = o.RecID
+	WHERE o.OperatorName LIKE '%' + @operatorName  + ' % '
+	 

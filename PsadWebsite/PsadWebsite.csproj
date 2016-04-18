@@ -235,7 +235,6 @@
     <Content Include="Data\Operators_5264fc9d-4abb-4b12-8c9d-94c0324a01c0.csv" />
     <Content Include="Data\Organisations_2f539095-d792-4285-8b73-b91a4e32be58.csv" />
     <Content Include="Data\Patients_1b6b7702-f47e-4c61-90df-5e1c533d78fc.csv" />
-    <Content Include="DataUpload.ashx" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Media\Images\MovotecLogo.png" />
     <Content Include="Scripts\ai.0.15.0-build58334.js" />
@@ -430,9 +429,6 @@
     </Compile>
     <Compile Include="Contact.aspx.designer.cs">
       <DependentUpon>Contact.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="DataUpload.ashx.cs">
-      <DependentUpon>DataUpload.ashx</DependentUpon>
     </Compile>
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>

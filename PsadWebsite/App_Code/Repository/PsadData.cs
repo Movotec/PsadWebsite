@@ -479,9 +479,9 @@ namespace PsadWebsite.App_Code.Repository
             return columns;
         }
 
-        private void AddDataReference(Guid mId, DataTable data)
+        private void AddDataReference(Guid mId, DataTable data, string column)
         {
-            DataColumn col = data.Columns["MeasurementID"];
+            DataColumn col = data.Columns[column];
             foreach (DataRow row in data.Rows)
             {
                 row[col] = mId;
@@ -602,6 +602,8 @@ namespace PsadWebsite.App_Code.Repository
         private bool ProcessMeasurements(List<string> filePathList, DataTable measurement, DataTable data, string storageFolder, params int[] columnValueStructure)
         {
             int fileIndex = -1;
+            string id = "MeasureGuid";
+            string dataId = "MeasurementID";
 
             foreach (string filestr in filePathList) // foreach file
             {
@@ -619,8 +621,8 @@ namespace PsadWebsite.App_Code.Repository
                             fileIndex += AddSpecialCaseToDataTable(csvReader, measurement, columnValueStructure);
                             AddsRestOfFileToDataTable(csvReader, data);
 //Either restructure or read measurment from filename
-                            //Guid mId = measurement.Rows[fileIndex].Field<Guid>("MeasurementID");
-                            //AddDataReference(mId, data);
+                            Guid mId = measurement.Rows[fileIndex].Field<Guid>(id);
+                            AddDataReference(mId, data, dataId);
                             success = true;
                         }
                     }
