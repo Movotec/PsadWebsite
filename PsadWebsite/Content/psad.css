@@ -1,0 +1,196 @@
+/* Imports */
+.navbar-toggle:hover {
+  background: inherit; }
+
+/*@mixin color-orange-alpha($alpha)
+{
+    : rgba(246,120,40, $alpha);
+}*/
+/* Generic Effects*/
+*:hover, *:focus {
+  -webkit-transition: all 0.2s ease;
+  -moz-transition: all 0.2s ease;
+  -ms-transition: all 0.2s ease;
+  -o-transition: all 0.2s ease;
+  transition: all 0.2s ease; }
+
+textarea:focus,
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="datetime"]:focus,
+input[type="datetime-local"]:focus,
+input[type="date"]:focus,
+input[type="month"]:focus,
+input[type="time"]:focus,
+input[type="week"]:focus,
+input[type="number"]:focus,
+input[type="email"]:focus,
+input[type="url"]:focus,
+input[type="search"]:focus,
+input[type="tel"]:focus,
+input[type="color"]:focus,
+input[type="radio"]:focus,
+.uneditable-input:focus {
+  /* Specifcally for search bar*/
+  border-left: 1px solid;
+  border-top: 1px solid;
+  border-bottom: 1px solid;
+  border-color: #f67828;
+  -webkit-box-shadow: #f67828 0 0 5px;
+  -moz-box-shadow: #f67828 0 0 5px;
+  box-shadow: #f67828 0 0 5px;
+  outline: 0 none; }
+
+/* Formating and Small stuff */
+h1, h2, h3, h4 {
+  color: #f67828;
+  margin: 10px 0; }
+
+hr {
+  border: 2px solid #f67828; }
+
+/* Wrappers */
+html {
+  height: 100%; }
+
+/* Move down content because we have a fixed navbar that is 50px tall */
+body {
+  color: #f2f2f2;
+  height: 100%;
+  background: #4f5358;
+  padding-top: 75px;
+  font-size: 1.6em; }
+
+form {
+  height: 100%;
+  position: relative; }
+
+/* Wrapping element */
+/* Set some basic padding to keep content from hitting the edges */
+.body-content {
+  padding-left: 15px;
+  padding-right: 15px;
+  position: relative; }
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+  white-space: normal; }
+
+/* General Containers */
+.jumbotron {
+  background: #0f4c64;
+  /*h1,h2,h3,h4
+  {
+      color:$color-3;
+  }*/ }
+
+.well {
+  padding: 10px;
+  background: #4f5358;
+  -webkit-box-shadow: #000 0 2px 5px 0 inset;
+  -moz-box-shadow: #000 0 2px 5px 0 inset;
+  box-shadow: #000 0 2px 5px 0 inset;
+  border: none;
+  margin: 0; }
+  .well h1 {
+    padding: 10px;
+    border-radius: 10px;
+    background: #0f4c64;
+    display: block;
+    -webkit-box-shadow: #000 0 5px 5px -5px;
+    -moz-box-shadow: #000 0 5px 5px -5px;
+    box-shadow: #000 0 5px 5px -5px; }
+  .well .row {
+    margin: 0;
+    padding: 5px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 10px; }
+  .well span {
+    display: block;
+    padding: 10px;
+    border-radius: 10px; }
+  .well .name {
+    display: block;
+    background: #f67828; }
+  .well .gender {
+    background: #0f4c64; }
+
+/* Navigation */
+.nav > li > a {
+  color: #f67828;
+  padding: 20px 15px; }
+
+.nav > li > a:hover {
+  background: rgba(255, 255, 255, 0.3); }
+
+.navbar {
+  background: #0f4c64;
+  -webkit-box-shadow: rgba(0, 0, 0, 0.5) 0 -5px 5px 5px;
+  -moz-box-shadow: rgba(0, 0, 0, 0.5) 0 -5px 5px 5px;
+  box-shadow: rgba(0, 0, 0, 0.5) 0 -5px 5px 5px; }
+
+.navbar-nav .input-group {
+  border: none;
+  height: 34px;
+  padding-top: 14px;
+  padding-bottom: 8px; }
+  .navbar-nav .input-group .btn {
+    height: 34px; }
+
+.navbar-header a {
+  color: #f67828; }
+.navbar-header button span {
+  background: #f2f2f2; }
+
+/* Inputs */
+.btn {
+  height: 34px;
+  border: none; }
+
+.btn-primary {
+  background: #f67828; }
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active,
+.btn-primary.active,
+.open .dropdown-toggle.btn-primary {
+  background: #ff9551; }
+
+.input-group * {
+  border: none; }
+.input-group .input-group-button {
+  height: 100%; }
+
+.form-control {
+  background: #4f5358;
+  color: #f2f2f2; }
+
+.radio-list-vertical tr {
+  padding-left: 20px; }
+  .radio-list-vertical tr td input {
+    padding-left: 20px; }
+  .radio-list-vertical tr td label {
+    padding-left: 20px; }
+
+/* Footer */
+footer {
+  background: #0f4c64;
+  border-radius: 10px;
+  height: 150px;
+  padding: 25px;
+  margin: 50px 0;
+  -webkit-box-shadow: rgba(0, 0, 0, 0.5) 0 4px 5px 2px inset;
+  -moz-box-shadow: rgba(0, 0, 0, 0.5) 0 4px 5px 2px inset;
+  box-shadow: rgba(0, 0, 0, 0.5) 0 4px 5px 2px inset; }
+
+.movo-logo-frame {
+  border-radius: 45%; }
+
+/* Table/Form Structure */
+.data-grid {
+  font-size: 10px; }
+
+/*# sourceMappingURL=psad.css.map */

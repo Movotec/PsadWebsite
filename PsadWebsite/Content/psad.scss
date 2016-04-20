@@ -1,0 +1,332 @@
+﻿/* Imports */
+@import '_bootstrap-clearer.scss';
+
+//Orange
+$color-orange:#f67828;
+$color-orange-rgb:rgb(246,120,40);
+$color-orange-faded:#ff9551;
+
+//Blue
+$color-blue:#0f4c64;
+//Grey
+$color-grey:#4f5358;
+//White
+$color-white:#f2f2f2;
+
+$color-1: $color-blue;
+$color-2: $color-grey;
+$color-3: $color-orange;
+$color-3-faded: $color-orange-faded;
+$color-4: $color-white;
+
+$color-hover:#ff9551;
+
+
+/*@mixin color-orange-alpha($alpha)
+{
+    : rgba(246,120,40, $alpha);
+}*/
+
+@mixin transition($who, $time, $func)
+{
+    -webkit-transition: $who $time $func;
+    -moz-transition: $who $time $func;
+    -ms-transition: $who $time $func;
+    -o-transition: $who $time $func;
+    transition: $who $time $func;
+}
+
+@mixin box-shadow-inset($color, $dimensions)
+{
+    -webkit-box-shadow: $color $dimensions inset;
+    -moz-box-shadow: $color $dimensions inset;
+    box-shadow: $color $dimensions inset;
+}
+
+@mixin box-shadow($color, $dimensions)
+{
+    -webkit-box-shadow: $color $dimensions;
+    -moz-box-shadow: $color $dimensions;
+    box-shadow: $color $dimensions;
+}
+
+/* Generic Effects*/
+*:hover, *:focus
+{
+    @include transition(all, 0.2s, ease);
+}
+
+textarea:focus,
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="datetime"]:focus,
+input[type="datetime-local"]:focus,
+input[type="date"]:focus,
+input[type="month"]:focus,
+input[type="time"]:focus,
+input[type="week"]:focus,
+input[type="number"]:focus,
+input[type="email"]:focus,
+input[type="url"]:focus,
+input[type="search"]:focus,
+input[type="tel"]:focus,
+input[type="color"]:focus,
+input[type="radio"]:focus,
+.uneditable-input:focus
+{
+    /* Specifcally for search bar*/
+    border-left:1px solid;
+    border-top:1px solid;
+    border-bottom:1px solid;
+    border-color:$color-3; //rgba(246,120,40, 1);
+
+    @include box-shadow($color-3, 0 0 5px);
+    //box-shadow:  0 0 5px rgba(246,120,40,1); /*0 1px 1px rgba(0, 0, 0, 0.075) inset,*/
+    outline: 0 none;
+}
+
+/* Formating and Small stuff */
+h1,h2,h3,h4
+{
+    color:$color-3;
+    margin:10px 0;
+}
+
+
+hr
+{
+    border:2px solid #f67828;
+}
+
+/* Wrappers */
+html
+{
+    height:100%;
+}
+/* Move down content because we have a fixed navbar that is 50px tall */
+body 
+{
+    color:$color-4;
+    height:100%;
+
+    background:$color-2;
+    padding-top: 75px;
+    font-size:1.6em;
+}
+form
+{
+    height:100%;
+    position:relative;
+}
+
+
+/* Wrapping element */
+/* Set some basic padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+    position:relative;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+
+/* General Containers */
+.jumbotron
+{
+    background:$color-1;
+
+    /*h1,h2,h3,h4
+    {
+        color:$color-3;
+    }*/
+}
+.well
+{
+    padding:10px;
+    background:$color-2;
+    @include box-shadow-inset(#000, 0 2px 5px 0);
+    border:none;
+    margin:0;
+
+    h1
+    {
+        padding:10px;
+        border-radius:10px;
+        background:$color-1;
+        display:block;
+
+       @include box-shadow(#000, 0 5px 5px -5px);
+
+    }
+
+    .row
+    {
+        margin:0;
+        padding:5px;
+        background:rgba(0,0,0,0.2);
+        border-radius:10px;
+    }
+
+    span
+    {
+        display:block;
+        padding:10px;
+        border-radius:10px;
+
+        
+    }
+    .name
+    {
+        display:block;
+        background:$color-orange;
+    }
+    .gender
+    {
+        background:$color-1;
+    }
+}
+
+
+/* Navigation */
+
+.nav > li > a
+{
+    color:$color-3;
+    padding: 20px 15px;
+}
+.nav > li > a:hover
+{
+    background:rgba(255,255,255,0.3);
+}
+
+
+.navbar
+{
+    background:$color-1;
+    @include box-shadow(rgba(0,0,0,0.5), 0 -5px 5px 5px);
+}
+.navbar-nav
+{
+    .input-group
+    {
+        border:none;
+        height:34px;
+        padding-top:14px;
+        padding-bottom:8px;
+
+        .btn
+        {
+            height:34px;
+        }
+    }
+}
+
+.navbar-header
+{
+    a
+    {
+        color:$color-3;
+    }
+
+    button
+    {
+        span
+        {
+            background:$color-4;
+        }
+    }
+}
+
+
+/* Inputs */
+.btn
+{
+    height:34px;
+    border:none;
+}
+
+.btn-primary
+{
+    background:$color-3;
+}
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active,
+.btn-primary.active,
+.open .dropdown-toggle.btn-primary
+{
+    background:$color-3-faded;
+}
+
+.input-group
+{
+    *
+    {
+        border:none;    
+    }
+
+    .input-group-button
+    {
+        height:100%;
+    }
+    
+}
+
+.form-control
+{
+    background:$color-2;
+    color:$color-4;
+}
+
+
+
+.radio-list-vertical
+{
+    tr
+    {
+        padding-left:20px;
+        td
+        {
+            input
+            {
+                padding-left:20px;
+            }
+            label
+            {
+                padding-left:20px;
+            }
+        }
+    }
+}
+
+
+/* Footer */
+footer
+{
+    background:$color-1;
+    border-radius:10px;
+    height:150px;
+    padding:25px;
+    margin:50px 0;
+     
+    @include box-shadow-inset(rgba(0,0,0,0.5), 0 4px 5px 2px);
+    //box-shadow: inset rgba(0,0,0,0.5) 0 4px 5px 2px;
+}
+.movo-logo-frame
+{
+    border-radius:45%;
+}
+
+
+/* Table/Form Structure */
+
+.data-grid 
+{
+    font-size:10px;
+}

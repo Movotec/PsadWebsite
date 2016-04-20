@@ -22,13 +22,22 @@ namespace PsadWebsite {
         protected global::System.Web.UI.WebControls.Literal LiteralSiteName;
         
         /// <summary>
-        /// ButtonSearch control.
+        /// TextBoxSearch control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button ButtonSearch;
+        protected global::System.Web.UI.WebControls.TextBox TextBoxSearch;
+        
+        /// <summary>
+        /// LinkButtonSearch control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton LinkButtonSearch;
         
         /// <summary>
         /// MainContent control.

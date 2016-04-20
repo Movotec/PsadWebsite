@@ -127,12 +127,17 @@ h1,h2,h3,h4, .jumbotron h1, .jumbotron h2, .jumbotron h3, .jumbotron h4
     /*background:#ca611f;*/
 }
 
-.movo-logo-frame
+.movo-logo-frame/**/
 {
     border-radius:45%;
 }
 
 /* Bootstrap overwrites */
+.well
+{
+    
+}
+
 .navbar-fixed-top
 {
     box-shadow: rgba(0,0,0,0.5) 0 -5px 5px 5px;
@@ -231,6 +236,8 @@ form
 {
     position:relative;
 }
+
+
 
 
 

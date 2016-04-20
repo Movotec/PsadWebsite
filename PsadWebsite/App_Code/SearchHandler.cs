@@ -13,8 +13,44 @@ namespace PsadWebsite.App_Code
     // Get measurement data from specific patient
     // Get patients measurement data from specific age range
 
+    // plain query should search through all names, so organisations names, patients, operators
+
+
     public class SearchHandler
     {
+        private static string q = "q"; // for basic queries
+        private static string g = "g"; // for specific groups
+
+        public static string Q { get { return q; } }
+
+        public static string QueryFormatBase(string queryId)
+        {
+            return "?" + queryId + "=";
+        }
+
+        public static string QueryFormatCont(string queryId)
+        {
+            return "&" + queryId + "=";
+        }
+
+        public static string QueryString(string url, string query)
+        {
+            return url + QueryFormatBase(Q) + query;
+        }
+
+        public static string QueryString(string url, string query, string grouping)
+        {
+            return url + QueryFormatBase(Q) + query + QueryFormatCont(g) + grouping;
+        }
+
+        public static DataTable GetPeople(string name)
+        {
+            SqlParameter para = new SqlParameter("@name", SqlDbType.NVarChar, 50);
+            para.Value = name;
+            return SqlHandler.QueryDataTable("GetPeopleByName");
+        }
+
+
         public static DataTable GetPatient(Guid patientId)
         {
             return null;

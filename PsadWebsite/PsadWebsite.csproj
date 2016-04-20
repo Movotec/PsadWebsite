@@ -219,6 +219,7 @@
     <Content Include="Contact.aspx" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\psad.css" />
     <Content Include="Content\Site.css" />
     <Content Include="Data\Operators\dummy.txt" />
     <Content Include="Data\Organisations\dummy.txt" />
@@ -235,6 +236,9 @@
     <Content Include="Data\Operators_5264fc9d-4abb-4b12-8c9d-94c0324a01c0.csv" />
     <Content Include="Data\Organisations_2f539095-d792-4285-8b73-b91a4e32be58.csv" />
     <Content Include="Data\Patients_1b6b7702-f47e-4c61-90df-5e1c533d78fc.csv" />
+    <Content Include="Content\psad.scss" />
+    <Content Include="Content\psad.css.map" />
+    <Content Include="Content\_bootstrap-clearer.scss" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Media\Images\MovotecLogo.png" />
     <Content Include="Scripts\ai.0.15.0-build58334.js" />
@@ -401,6 +405,7 @@
     <Compile Include="App_Code\EnitityModels\Organisation.cs" />
     <Compile Include="App_Code\EnitityModels\Patients.cs" />
     <Compile Include="App_Code\EnitityModels\PsadDatabase.cs" />
+    <Compile Include="App_Code\Enumerators.cs" />
     <Compile Include="App_Code\Repository\ResetScript.cs" />
     <Compile Include="App_Code\Repository\SqlHandler.cs" />
     <Compile Include="App_Code\Repository\PsadData.cs" />

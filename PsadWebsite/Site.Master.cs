@@ -7,12 +7,19 @@ using System.Web.Security;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Microsoft.AspNet.Identity;
+using PsadWebsite.App_Code;
+
 namespace PsadWebsite
 {
     public partial class SiteMaster : MasterPage
     {
         public const string siteName = "PSAD";
-        
+        public const string searchPage = "~/Search.aspx";
+        public const string aboutPage = "~/About.aspx";
+        public const string contactPage = "~/Contact.aspx";
+
+
+
 
         private const string AntiXsrfTokenKey = "__AntiXsrfToken";
         private const string AntiXsrfUserNameKey = "__AntiXsrfUserName";
@@ -83,11 +90,18 @@ namespace PsadWebsite
 
         protected void ButtonSearch_Click(object sender, EventArgs e)
         {
-            while (true)
-            {
-                //Text
-                //GetPatient(); //.... lots of different simples queries for that small stuff
+            string search = TextBoxSearch.Text;
+
+            if (search != string.Empty)
+            {                
+                Response.Redirect(SearchHandler.QueryString(searchPage, search));
             }
+            else
+            {
+                Response.Redirect(searchPage);
+            }
+            //Text
+            //GetPatient(); //.... lots of different simples queries for that small stuff
         }
     }
 
