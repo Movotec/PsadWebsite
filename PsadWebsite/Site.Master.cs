@@ -14,16 +14,94 @@ namespace PsadWebsite
     public partial class SiteMaster : MasterPage
     {
         public const string siteName = "PSAD";
-        public const string searchPage = "~/Search.aspx";
-        public const string aboutPage = "~/About.aspx";
-        public const string contactPage = "~/Contact.aspx";
+        //public const string HomepageLink = "~/";
+        //public const string SearchpageLink = "~/search.aspx";
+        //public const string AboutpageLink = "~/about.aspx";
+        //public const string ContactpageLink = "~/contact.aspx";
 
 
+        private static Dictionary<string, string> pageLinks = new Dictionary<string, string>()
+        {
+            { "Home", "~/" },
+            { "Search", "~/Search.aspx" },
+            { "About", "~/About.aspx" },
+            { "Contact",  "~/Contact.aspx" }
+        };
 
 
         private const string AntiXsrfTokenKey = "__AntiXsrfToken";
         private const string AntiXsrfUserNameKey = "__AntiXsrfUserName";
         private string _antiXsrfTokenValue;
+
+        public static string HomepageLink
+        {
+            get { return pageLinks["Home"]; }
+        }
+        public static string SearchpageLink
+        {
+            get { return pageLinks["Search"]; }
+        }
+        public static string AboutpageLink
+        {
+            get { return pageLinks["About"]; }
+        }
+        public static string ContactpageLink
+        {
+            get { return pageLinks["Contact"]; }
+        }
+
+        private string TrimLink(string url)
+        {
+            string trimmed = url.TrimStart('~');
+            trimmed = trimmed.TrimEnd('.');
+            return trimmed;
+
+        }
+
+        // Need a smart way to compare links, right now link from dictionary tries to compare against clean url, perhaps just compare against name
+        // But that would fail if you rename it to danish
+        private bool IsCurrentPage(string url)
+        {
+            //url = Page.ResolveClientUrl(url);
+
+            string name = Page.Request.Url.GetLeftPart(UriPartial.Path);
+            //name = name.TrimEnd('/');
+            bool boo = name.Equals(url);
+
+            //string fullurl
+            //Uri link = new Uri(url);
+            //string page = Page.Request.Url.GetLeftPart(UriPartial.Path);
+            //string urlstring = TrimLink(url);
+
+            //Uri pageUri = Page.Request.Url;///.GetLeftPart(UriPartial.Path);
+            //string uriBase = pageUri.Scheme + "/" + pageUri.Authority + "/";
+            //Uri uriUrl = new Uri(uriBase + url);
+            
+            //int boo = Uri.Compare(uriUrl, pageUri,UriComponents.Path, UriFormat.Unescaped, StringComparison.CurrentCulture);
+            return true;
+        }
+
+        private void SetCurrentPageAttributes(ListItem item, string css)
+        {
+            item.Attributes.Add("ID", "HyperLink" + item.Text);
+
+            if (IsCurrentPage(item.Value))
+                item.Attributes.Add("CssClass", css);
+
+        }
+
+        private void SetNavigation()
+        {
+            BulletedListNavigation.DisplayMode = BulletedListDisplayMode.HyperLink;
+
+            foreach (KeyValuePair<string, string> item in pageLinks)
+            {
+                ListItem listItem = new ListItem(item.Key, item.Value);
+                SetCurrentPageAttributes(listItem, "current-page");
+                BulletedListNavigation.Items.Add(listItem);
+            }
+
+        }
 
         protected void Page_Init(object sender, EventArgs e)
         {
@@ -80,7 +158,10 @@ namespace PsadWebsite
 
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            if (!Page.IsPostBack)
+            {
+                SetNavigation();
+            }
         }
 
         protected void Unnamed_LoggingOut(object sender, LoginCancelEventArgs e)
@@ -94,11 +175,11 @@ namespace PsadWebsite
 
             if (search != string.Empty)
             {                
-                Response.Redirect(SearchHandler.QueryString(searchPage, search));
+                Response.Redirect(SearchHandler.QueryString(SearchpageLink, search));
             }
             else
             {
-                Response.Redirect(searchPage);
+                Response.Redirect(SearchpageLink);
             }
             //Text
             //GetPatient(); //.... lots of different simples queries for that small stuff

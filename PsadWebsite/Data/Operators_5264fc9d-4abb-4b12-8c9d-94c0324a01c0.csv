@@ -1,5 +1,0 @@
-RecID;OrganisationID;OperatorName;Address;City;Email;Phone;Gender;Type;Status
-628a48a7-f373-43fa-90b9-c6b050e71283;c8888ed8-8116-4317-8415-5658aef77d11;Johnny N;;;;;;Normal;Active
-500c4cc8-0d5c-47e0-9d74-f0319d274f34;c8888ed8-8116-4317-8415-5658aef77d11;Johan Jørgensen;;;;;;Administrator;Active
-a6d8ebd8-8243-40c3-a50f-a05b4295d43a;c8888ed8-8116-4317-8415-5658aef77d11;Chance;;;;;;Administrator;Active
-eff5d971-4d9b-4579-b781-cc768b588bea;c8888ed8-8116-4317-8415-5658aef77d11;xx;;;;;;Administrator;Active

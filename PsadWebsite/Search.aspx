@@ -69,11 +69,15 @@
             <asp:Panel ID="PanelPatients" runat="server" CssClass="well" Visible="false">
                 <h1>Patients</h1>
                 <div class="row">
+                    <!-- Could programatically make bootstrap collumn size based on number of values -->
                     <asp:Repeater ID="RepeaterPatients" runat="server">
                         <ItemTemplate>
                                 <div class="col-lg-4">
                                     <div class="row">
-                                        <asp:Label runat="server" CssClass="name col-lg-4" Text='<%# Eval("name").ToString() %>'></asp:Label>
+                                        <asp:Label runat="server" ID="name" CssClass="name col-lg-3" Text='<%# Eval("name").ToString() %>' ></asp:Label>
+                                        <asp:Label runat="server" ID="gender" CssClass="gender col-lg-3" Text='<%# Eval("gender") %>'></asp:Label>
+                                        <asp:Label runat="server" ID="year" CssClass="year col-lg-3"  Text='<%# Eval("year") %>'></asp:Label>
+                                        <asp:Label runat="server" ID="status" CssClass="status col-lg-3"  Text='<%# Eval("status") %>'></asp:Label>
                                     </div>
                                 </div>
                         
@@ -103,5 +107,4 @@
         </div>
     </div>
 
-    <link href="Content/psad.css" rel="stylesheet" />
 </asp:Content>

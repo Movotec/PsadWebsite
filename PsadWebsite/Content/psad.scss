@@ -21,6 +21,9 @@ $color-4: $color-white;
 
 $color-hover:#ff9551;
 
+//Dimensions
+$footer-height:150px;
+
 
 /*@mixin color-orange-alpha($alpha)
 {
@@ -110,7 +113,9 @@ body
     height:100%;
 
     background:$color-2;
-    padding-top: 75px;
+    //padding-top: 75px;
+    padding:75px 0 0 0;
+    margin:0px;
     font-size:1.6em;
 }
 form
@@ -118,13 +123,17 @@ form
     height:100%;
     position:relative;
 }
+.wrapper
+{
+    min-height:100%;
+    position:relative;
+}
 
 
 /* Wrapping element */
 /* Set some basic padding to keep content from hitting the edges */
 .body-content {
-    padding-left: 15px;
-    padding-right: 15px;
+    padding:0 15px $footer-height 15px;
     position:relative;
 }
 
@@ -150,47 +159,96 @@ form
 {
     padding:10px;
     background:$color-2;
-    @include box-shadow-inset(#000, 0 2px 5px 0);
+    //@include box-shadow-inset(#000, 0 2px 5px 0);
     border:none;
     margin:0;
 
     h1
     {
         padding:10px;
-        border-radius:10px;
+        border-radius:10px 10px 0 0;
+        margin-bottom:0px;
         background:$color-1;
         display:block;
+        
 
-       @include box-shadow(#000, 0 5px 5px -5px);
-
+       //@include box-shadow(#000, 0 5px 5px -5px);
     }
 
-    .row
-    {
-        margin:0;
-        padding:5px;
-        background:rgba(0,0,0,0.2);
-        border-radius:10px;
-    }
+    
 
     span
     {
         display:block;
         padding:10px;
-        border-radius:10px;
-
-        
+        background: rgba(0,0,0,0.1);
     }
-    .name
+    span:first-child
+    {
+        border-radius:4px 0 0 4px !important; 
+    }
+    span:last-child
+    {
+        border-radius:0 4px 4px 0;
+    }
+
+    /*.name
     {
         display:block;
         background:$color-orange;
-    }
+    }*/
     .gender
     {
         background:$color-1;
     }
 }
+
+.well > .row
+{
+    margin:0;
+    padding:5px;
+    background:rgba(0,0,0,0.2);
+    //border-radius:10px;
+}
+
+.well > .row:last-child
+{
+    border-radius:0 0 10px 10px;
+    margin-bottom: 10px;
+}
+
+.well > div > div > .row
+{
+        background:$color-1;
+        border:$color-1 solid 6px;
+        border-radius:10px;
+}
+
+// these only work if db values are the same
+.gender.male
+{
+    background:#2aa7c8;
+}
+
+.gender.female
+{
+    background:#9d3467;
+}
+
+/*.year
+{
+    background:#0c374d;
+}*/
+
+.status.active
+{
+    background:#4bc234;
+}
+.status.inactive
+{
+    background:#c21818;
+}
+
 
 
 /* Navigation */
@@ -200,6 +258,12 @@ form
     color:$color-3;
     padding: 20px 15px;
 }
+
+.nav > li > a, .navbar-brand
+{
+    padding: 20px 15px;
+}
+
 .nav > li > a:hover
 {
     background:rgba(255,255,255,0.3);
@@ -241,6 +305,11 @@ form
             background:$color-4;
         }
     }
+}
+
+.current-page
+{
+    color:$color-4;
 }
 
 
@@ -310,17 +379,21 @@ form
 footer
 {
     background:$color-1;
-    border-radius:10px;
-    height:150px;
+    //border-radius:10px;
+    height:$footer-height;
+    width:100%;
     padding:25px;
-    margin:50px 0;
+    margin:50px 0 0 0;
+    position:absolute;
+    bottom:0px;
      
-    @include box-shadow-inset(rgba(0,0,0,0.5), 0 4px 5px 2px);
+    //@include box-shadow-inset(rgba(0,0,0,0.5), 0 4px 5px 2px);
     //box-shadow: inset rgba(0,0,0,0.5) 0 4px 5px 2px;
 }
 .movo-logo-frame
 {
     border-radius:45%;
+    background:$color-4;
 }
 
 

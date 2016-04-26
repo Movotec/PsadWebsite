@@ -406,6 +406,8 @@
     <Compile Include="App_Code\EnitityModels\Patients.cs" />
     <Compile Include="App_Code\EnitityModels\PsadDatabase.cs" />
     <Compile Include="App_Code\Enumerators.cs" />
+    <Compile Include="App_Code\Link.cs" />
+    <Compile Include="App_Code\Links.cs" />
     <Compile Include="App_Code\Repository\ResetScript.cs" />
     <Compile Include="App_Code\Repository\SqlHandler.cs" />
     <Compile Include="App_Code\Repository\PsadData.cs" />

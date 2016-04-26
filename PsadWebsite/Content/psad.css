@@ -58,18 +58,22 @@ body {
   color: #f2f2f2;
   height: 100%;
   background: #4f5358;
-  padding-top: 75px;
+  padding: 75px 0 0 0;
+  margin: 0px;
   font-size: 1.6em; }
 
 form {
   height: 100%;
   position: relative; }
 
+.wrapper {
+  min-height: 100%;
+  position: relative; }
+
 /* Wrapping element */
 /* Set some basic padding to keep content from hitting the edges */
 .body-content {
-  padding-left: 15px;
-  padding-right: 15px;
+  padding: 0 15px 150px 15px;
   position: relative; }
 
 /* Override the default bootstrap behavior where horizontal description lists 
@@ -89,37 +93,66 @@ form {
 .well {
   padding: 10px;
   background: #4f5358;
-  -webkit-box-shadow: #000 0 2px 5px 0 inset;
-  -moz-box-shadow: #000 0 2px 5px 0 inset;
-  box-shadow: #000 0 2px 5px 0 inset;
   border: none;
-  margin: 0; }
+  margin: 0;
+  /*.name
+  {
+      display:block;
+      background:$color-orange;
+  }*/ }
   .well h1 {
     padding: 10px;
-    border-radius: 10px;
+    border-radius: 10px 10px 0 0;
+    margin-bottom: 0px;
     background: #0f4c64;
-    display: block;
-    -webkit-box-shadow: #000 0 5px 5px -5px;
-    -moz-box-shadow: #000 0 5px 5px -5px;
-    box-shadow: #000 0 5px 5px -5px; }
-  .well .row {
-    margin: 0;
-    padding: 5px;
-    background: rgba(0, 0, 0, 0.2);
-    border-radius: 10px; }
+    display: block; }
   .well span {
     display: block;
     padding: 10px;
-    border-radius: 10px; }
-  .well .name {
-    display: block;
-    background: #f67828; }
+    background: rgba(0, 0, 0, 0.1); }
+  .well span:first-child {
+    border-radius: 4px 0 0 4px !important; }
+  .well span:last-child {
+    border-radius: 0 4px 4px 0; }
   .well .gender {
     background: #0f4c64; }
+
+.well > .row {
+  margin: 0;
+  padding: 5px;
+  background: rgba(0, 0, 0, 0.2); }
+
+.well > .row:last-child {
+  border-radius: 0 0 10px 10px;
+  margin-bottom: 10px; }
+
+.well > div > div > .row {
+  background: #0f4c64;
+  border: #0f4c64 solid 6px;
+  border-radius: 10px; }
+
+.gender.male {
+  background: #2aa7c8; }
+
+.gender.female {
+  background: #9d3467; }
+
+/*.year
+{
+    background:#0c374d;
+}*/
+.status.active {
+  background: #4bc234; }
+
+.status.inactive {
+  background: #c21818; }
 
 /* Navigation */
 .nav > li > a {
   color: #f67828;
+  padding: 20px 15px; }
+
+.nav > li > a, .navbar-brand {
   padding: 20px 15px; }
 
 .nav > li > a:hover {
@@ -143,6 +176,9 @@ form {
   color: #f67828; }
 .navbar-header button span {
   background: #f2f2f2; }
+
+.current-page {
+  color: #f2f2f2; }
 
 /* Inputs */
 .btn {
@@ -178,16 +214,16 @@ form {
 /* Footer */
 footer {
   background: #0f4c64;
-  border-radius: 10px;
   height: 150px;
+  width: 100%;
   padding: 25px;
-  margin: 50px 0;
-  -webkit-box-shadow: rgba(0, 0, 0, 0.5) 0 4px 5px 2px inset;
-  -moz-box-shadow: rgba(0, 0, 0, 0.5) 0 4px 5px 2px inset;
-  box-shadow: rgba(0, 0, 0, 0.5) 0 4px 5px 2px inset; }
+  margin: 50px 0 0 0;
+  position: absolute;
+  bottom: 0px; }
 
 .movo-logo-frame {
-  border-radius: 45%; }
+  border-radius: 45%;
+  background: #f2f2f2; }
 
 /* Table/Form Structure */
 .data-grid {

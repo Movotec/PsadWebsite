@@ -18,6 +18,7 @@
     <!-- <link href="Content/bootstrap.min.css" rel="stylesheet" /> -->
 <%--    <link href="Content/Site.css" rel="stylesheet" />--%>
     <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <link href="Content/psad.css" rel="stylesheet" />
 
 </head>
 <body>
@@ -43,71 +44,72 @@
             </Scripts>
         </asp:ScriptManager>
 
-        <div class="navbar navbar-fixed-top">
-            <div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle btn-primary" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
+        <div class="wrapper">
+
+            <div class="navbar navbar-fixed-top">
+                <div class="container">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle btn-primary" data-toggle="collapse" data-target=".navbar-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
                    
-                    <a class="navbar-brand" runat="server" href="~/">
+                        <a class="navbar-brand" runat="server" href="~/">
                         
 
-                        <asp:Literal ID="LiteralSiteName" runat="server"></asp:Literal>
-                         </a>
-                </div>
-                <div class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav">
-                        <li><a runat="server" href="~/">Home</a></li>
-                        <li><a runat="server" href="~/Search">Search</a></li>
-                        <li><a runat="server" href="~/About">About</a></li>
-                        <li><a runat="server" href="~/Contact">Contact</a></li>
-                    </ul>
-                   
-                    <ul class="nav navbar-nav navbar-right">
-                        <li>
-                            <div class="input-group">
-                                <asp:TextBox ID="TextBoxSearch" CssClass="form-control movo-bg-grey" runat="server" placeholder="Search for..."></asp:TextBox>
+                            <asp:Literal ID="LiteralSiteName" runat="server"></asp:Literal>
+                             </a>
+                    </div>
+                    <div class="navbar-collapse collapse">
+                        <asp:BulletedList ID="BulletedListNavigation" CssClass="nav navbar-nav" runat="server">
+                            
+                        </asp:BulletedList>
+                        <ul class="nav navbar-nav navbar-right">
+                            <li>
+                                <div class="input-group">
+                                    <asp:TextBox ID="TextBoxSearch" CssClass="form-control movo-bg-grey" runat="server" placeholder="Search for..."></asp:TextBox>
                       
-                                <span class="input-group-btn">
+                                    <span class="input-group-btn">
 
-                                    <asp:LinkButton ID="LinkButtonSearch" runat="server" CssClass="btn btn-primary" OnClick="ButtonSearch_Click">
-                                        <span class="glyphicon glyphicon-search"></span>
-                                    </asp:LinkButton>
-<%--                                    <asp:Button ID="ButtonSearch" runat="server" Text="Button" CssClass="btn btn-default movo-bg-orange" OnClick="ButtonSearch_Click" >--%>
-                                 <%--   <button class="btn btn-default movo-bg-orange" runat="server" type="button" onclick="ButtonSearch_Click" >
-                                        <span class="glyphicon glyphicon-search"></span>
-                                    </button>--%>
-<%--                                    </asp:Button>--%>
-                                </span>
-                            </div><!-- /input-group -->
-                        </li>
+                                        <asp:LinkButton ID="LinkButtonSearch" runat="server" CssClass="btn btn-primary" OnClick="ButtonSearch_Click">
+                                            <span class="glyphicon glyphicon-search"></span>
+                                        </asp:LinkButton>
+    <%--                                    <asp:Button ID="ButtonSearch" runat="server" Text="Button" CssClass="btn btn-default movo-bg-orange" OnClick="ButtonSearch_Click" >--%>
+                                     <%--   <button class="btn btn-default movo-bg-orange" runat="server" type="button" onclick="ButtonSearch_Click" >
+                                            <span class="glyphicon glyphicon-search"></span>
+                                        </button>--%>
+    <%--                                    </asp:Button>--%>
+                                    </span>
+                                </div><!-- /input-group -->
+                            </li>
                         
-                        <asp:LoginView runat="server" ViewStateMode="Disabled">
-                            <AnonymousTemplate>
-                                    <li><a runat="server" href="~/Account/Register">Register</a></li>
-                                    <li><a runat="server" href="~/Account/Login">Log in</a></li>
-                            </AnonymousTemplate>
-                            <LoggedInTemplate>
-                                    <li><a runat="server" href="~/Account/Manage" title="Manage your account">Hello, <%: Context.User.Identity.GetUserName()  %> !</a></li>
-                                    <li>
-                                        <asp:LoginStatus runat="server" LogoutAction="Redirect" LogoutText="Log off" LogoutPageUrl="~/" OnLoggingOut="Unnamed_LoggingOut" />
-                                    </li>
-                            </LoggedInTemplate>
-                        </asp:LoginView>
-                    </ul>
+                            <asp:LoginView runat="server" ViewStateMode="Disabled">
+                                <AnonymousTemplate>
+                                        <li><a runat="server" href="~/Account/Register">Register</a></li>
+                                        <li><a runat="server" href="~/Account/Login">Log in</a></li>
+                                </AnonymousTemplate>
+                                <LoggedInTemplate>
+                                        <li><a runat="server" href="~/Account/Manage" title="Manage your account">Hello, <%: Context.User.Identity.GetUserName()  %> !</a></li>
+                                        <li>
+                                            <asp:LoginStatus runat="server" LogoutAction="Redirect" LogoutText="Log off" LogoutPageUrl="~/" OnLoggingOut="Unnamed_LoggingOut" />
+                                        </li>
+                                </LoggedInTemplate>
+                            </asp:LoginView>
+                        </ul>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="container body-content">
-            <asp:ContentPlaceHolder ID="MainContent" runat="server">
-            </asp:ContentPlaceHolder>
+            <div class="container body-content">
+                <asp:ContentPlaceHolder ID="MainContent" runat="server">
+                </asp:ContentPlaceHolder>
             
+            
+            </div>
+
             <footer><!-- clasee="contrainer-fluid" --> 
-<%--                <hr />--%>
+    <%--                <hr />--%>
                 <div class="container">
 
                     <div class="row">
@@ -123,8 +125,6 @@
                 </div>
             </footer>
         </div>
-
-     
     </form>
 </body>
 </html>
