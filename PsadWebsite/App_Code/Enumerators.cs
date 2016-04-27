@@ -5,9 +5,9 @@ using System.Web;
 
 namespace PsadWebsite.App_Code
 {
-    public enum Data : byte
+    public enum EData : byte
     {
-        Measurements, Operators, Organisations, Patients
+        Patients = 1, Operators, Organisations, Measurements
     }
 
     // Swapped for Data enum
@@ -16,14 +16,14 @@ namespace PsadWebsite.App_Code
     //    Patients, Operators, Organisations
     //}
     
-    public enum Gender : byte
+    public enum EGender : byte
     {
-        Male, Female
+        Male = 1, Female
     }
 
-    public enum Status : byte
+    public enum EStatus : byte
     {
-        Active, Inactive, Pending
+        Active = 1, Inactive, Pending
     }
 
     

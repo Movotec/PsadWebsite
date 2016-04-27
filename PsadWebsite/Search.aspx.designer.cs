@@ -40,6 +40,15 @@ namespace PsadWebsite {
         protected global::System.Web.UI.WebControls.RadioButtonList RadioButtonListGroup;
         
         /// <summary>
+        /// PanelGender control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel PanelGender;
+        
+        /// <summary>
         /// RadioButtonListGender control.
         /// </summary>
         /// <remarks>
@@ -67,6 +76,15 @@ namespace PsadWebsite {
         protected global::System.Web.UI.WebControls.Repeater RepeaterPatients;
         
         /// <summary>
+        /// PanelOperators control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel PanelOperators;
+        
+        /// <summary>
         /// RepeaterOperators control.
         /// </summary>
         /// <remarks>
@@ -74,6 +92,15 @@ namespace PsadWebsite {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Repeater RepeaterOperators;
+        
+        /// <summary>
+        /// PanelOrganisations control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel PanelOrganisations;
         
         /// <summary>
         /// RepeaterOrganisations control.

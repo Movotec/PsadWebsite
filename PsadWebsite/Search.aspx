@@ -18,15 +18,18 @@
 
         </div>
 
-
+        <!-- Advanced Search -->
         <div class="row">
             <div class="col-lg-12">
                 <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#advancedSearch" aria-expanded="false" aria-controls="advancedSearch">
                     Advanced Search
                 </button>
+
+                <!-- This is very much a Mess, perhaps custom javascript that extends/alters Collapse.js for radio buttons specifically -->
+                <%--<input type="radio" data-toggle="collapse" data-target="#advancedSearch" aria-expanded="false" aria-controls="advancedSearch" />--%>
             </div>
             
-
+            
             <div class="collapse" id="advancedSearch">
                 <div class="col-lg-6">
                     Groups
@@ -35,23 +38,31 @@
                     <!-- See Enumerators.cs in APP_CODE for context -->
                     <!-- Grouping radio list (possibly make checklist)-->
                     <asp:RadioButtonList ID="RadioButtonListGroup" runat="server" CssClass="radio-list-vertical">
-                        <asp:ListItem Selected="True" Value="-1"> None specified</asp:ListItem>
-                        <asp:ListItem Value="0">Patients</asp:ListItem>
-                        <asp:ListItem Value="1">Operators</asp:ListItem>
-                        <asp:ListItem Value="2">Organisations</asp:ListItem>
+                        <asp:ListItem Selected="True" Value="0"> None specified</asp:ListItem>
+                        <asp:ListItem Value="1">Patients</asp:ListItem>
+                        <asp:ListItem Value="2">Operators</asp:ListItem>
+                        <asp:ListItem Value="3">Organisations</asp:ListItem>
                     </asp:RadioButtonList>
                 </div>
                 <div class="col-lg-6">
                     Gender
                 </div>
-                <div class="col-lg-6">
-                
 
+
+                <div id="advancedGender" class="col-lg-6">
+                    <asp:Panel ID="PanelGender" runat="server">
+                        <%--<asp:RadioButton runat="server" GroupName="Gender" Text="Males" />
+                        <asp:Label runat="server" Text="Male"></asp:Label>
+                        <asp:RadioButton runat="server" GroupName="Gender" Text="1" />
+                        <asp:Label runat="server" Text="Female"></asp:Label>--%>
+                    </asp:Panel>
+
+                    
                     <!-- Gender radio list -->
                     <asp:RadioButtonList ID="RadioButtonListGender" runat="server" CssClass="radio-list-vertical">
-                        <asp:ListItem Selected="True" Value="-1"> None specified</asp:ListItem>
-                        <asp:ListItem Value="0">Male</asp:ListItem>
-                        <asp:ListItem Value="0">Female</asp:ListItem>
+                        <asp:ListItem Selected="True" Value="0"> None specified</asp:ListItem>
+                        <asp:ListItem Value="1">Male</asp:ListItem>
+                        <asp:ListItem Value="2">Female</asp:ListItem>
                     </asp:RadioButtonList>
                             
                        
@@ -86,24 +97,42 @@
                 </div>
             </asp:Panel>
             
+             <asp:Panel ID="PanelOperators" runat="server" CssClass="well" Visible="false">
+                <h1>Operators</h1>
+                <div class="row">
+                    <!-- Could programatically make bootstrap collumn size based on number of values -->
+                    <asp:Repeater ID="RepeaterOperators" runat="server">
+                        <ItemTemplate>
+                                <div class="col-lg-4">
+                                    <div class="row">
+                                        <asp:Label runat="server" ID="name" CssClass="name col-lg-3" Text='<%# Eval("name").ToString() %>' ></asp:Label>
+                                        <asp:Label runat="server" ID="gender" CssClass="gender col-lg-3" Text='<%# Eval("gender") %>'></asp:Label>
+                                        <asp:Label runat="server" ID="status" CssClass="status col-lg-3"  Text='<%# Eval("status") %>'></asp:Label>
+                                    </div>
+                                </div>
+                        
+                     </ItemTemplate>
+                    </asp:Repeater>
+                </div>
+            </asp:Panel>
 
-            <asp:Repeater ID="RepeaterOperators" runat="server">
-                <ItemTemplate>
-                    <div>
-                        <asp:Label runat="server" CssClass="col-lg-4" Text='<%# Eval("name").ToString() %>'></asp:Label>
-                    </div>
-                </ItemTemplate>
+             <asp:Panel ID="PanelOrganisations" runat="server" CssClass="well" Visible="false">
+                <h1>Organisations</h1>
+                <div class="row">
+                    <!-- Could programatically make bootstrap collumn size based on number of values -->
+                    <asp:Repeater ID="RepeaterOrganisations" runat="server">
+                        <ItemTemplate>
+                                <div class="col-lg-4">
+                                    <div class="row">
+                                        <asp:Label runat="server" ID="name" CssClass="name col-lg-3" Text='<%# Eval("name").ToString() %>' ></asp:Label>
+                                    </div>
+                                </div>
+                        
+                     </ItemTemplate>
+                    </asp:Repeater>
+                </div>
+            </asp:Panel>
 
-            </asp:Repeater>
-
-            <asp:Repeater ID="RepeaterOrganisations" runat="server">
-                <ItemTemplate>
-                    <div>
-                        <asp:Label runat="server"  CssClass="col-lg-4" Text='<%# Eval("name").ToString() %>'></asp:Label>
-                    </div>
-                </ItemTemplate>
-
-            </asp:Repeater>
         </div>
     </div>
 

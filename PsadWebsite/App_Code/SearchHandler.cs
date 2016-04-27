@@ -13,69 +13,146 @@ namespace PsadWebsite.App_Code
     // Get measurement data from specific patient
     // Get patients measurement data from specific age range
 
-    // plain query should search through all names, so organisations names, patients, operators
-
+    // plain query should search through all names, so organisations names, patients, 
 
     public class SearchHandler
     {
-        private static string q = "q"; // for basic queries
-        private static string g = "g"; // for specific groups
+        #region Stored Procedures
+        const string paByName = "GetPatientsByName";
+        const string opByName = "GetOperatorsByName";
+        const string orgByName = "GetOrganisationsByName";
+        const string paByNameGender = "GetPatientsByNameWhereGender";
+        #endregion
 
-        public static string Q { get { return q; } }
+        private static string query = "query"; // for basic queries
+        private static string group = "group"; // for specific groups
+        private static string gender = "gender";
+        private static char delimiter = ';'; // the delimiter for the keysAndValues parameter for construction a querystring
 
-        public static string QueryFormatBase(string queryId)
+        public static string Query { get { return query; } }
+
+        public static string Group
         {
-            return "?" + queryId + "=";
+            get
+            {
+                return group;
+            }
         }
 
-        public static string QueryFormatCont(string queryId)
+        public static char Delimiter
         {
-            return "&" + queryId + "=";
+            get
+            {
+                return delimiter;
+            }
+        }
+
+        public static string Gender
+        {
+            get
+            {
+                return gender;
+            }
+        }
+
+        private static string QueryFormatBase(string key, string value)
+        {
+            return string.Format("?{0}={1}", key, value); 
+        }
+
+        private static string QueryFormatCont(string key, string value)
+        {
+            return string.Format("&{0}={1}", key, value);
         }
 
         public static string QueryString(string url, string query)
         {
-            return url + QueryFormatBase(Q) + query;
+            return url + QueryFormatBase(Query, query);
         }
 
-        public static string QueryString(string url, string query, string grouping)
+        /// <summary>
+        /// Generate a url query string from the, the query and various keys and values sepereated by a ';' delimiter
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="query"></param>
+        /// <param name="keyAndValues">Keys and values of other query string parameters seperated by a ';' delimiter</param>
+        /// <returns></returns>
+        public static string QueryString(string url, string query, params string[] keyAndValues)
         {
-            return url + QueryFormatBase(Q) + query + QueryFormatCont(g) + grouping;
+            string queryString = url + QueryFormatBase(Query, query);
+            int length = keyAndValues.Length;
+            for (int i = 0; i < length; i++)
+            {
+                string[] keyValueSplit = keyAndValues[i].Split(delimiter);
+
+                queryString += QueryFormatCont(keyValueSplit[0], keyValueSplit[1]);
+            }
+
+            return queryString;
         }
 
-        public static DataTable GetPeople(string name)
+        public static DataTable FindPeople(string query, EData group)
         {
+            string storedProcedure = null;
+            switch (group)
+            {
+                case EData.Patients: storedProcedure = paByName; break;
+                case EData.Operators: storedProcedure = opByName; break;
+                case EData.Organisations: storedProcedure = orgByName; break;
+            }
+
             SqlParameter para = new SqlParameter("@name", SqlDbType.NVarChar, 50);
-            para.Value = name;
-            return SqlHandler.QueryDataTable("GetPeopleByName");
+            para.Value = query;
+            return SqlHandler.QueryDataTable(storedProcedure, para);
         }
 
-
-        public static DataTable GetPatient(Guid patientId)
+        public static DataTable FindPeople(string query, EData group, EGender gender)
         {
-            return null;
+            string storedProcedure = null;
+            switch (group)
+            {
+                case EData.Patients: storedProcedure = paByNameGender; break;
+                case EData.Operators: storedProcedure = opByName; break;
+            }
+
+            SqlParameter para = new SqlParameter("@name", SqlDbType.NVarChar, 50);
+            para.Value = query;
+
+            SqlParameter para1 = new SqlParameter("@gender", SqlDbType.NVarChar, 50);
+            switch (gender)
+            {
+                case EGender.Male: para1.Value = "male"; break;
+                case EGender.Female: para1.Value = "female"; break;
+            }
+
+            return SqlHandler.QueryDataTable(storedProcedure, para, para1);
         }
 
-        public static DataTable GetPatient(string name)
-        {
-            return null;
-        }
+        //public static DataTable GetPatient(Guid patientId)
+        //{
+        //    return null;
+        //}
 
-        public static DataTable GetPatientsBasedOnOpereator(Guid operatorId)
-        {
-            SqlParameter para = new SqlParameter("@operatorId", SqlDbType.UniqueIdentifier);
-            para.Value = operatorId;
-            return SqlHandler.QueryDataTable("GetPatientsBasedOnOperatorById", para);
+        //public static DataTable GetPatient(string name)
+        //{
+        //    return null;
+        //}
 
-        }
+        //public static DataTable GetPatientsBasedOnOpereator(Guid operatorId)
+        //{
+        //    SqlParameter para = new SqlParameter("@operatorId", SqlDbType.UniqueIdentifier);
+        //    para.Value = operatorId;
+        //    return SqlHandler.QueryDataTable("GetPatientsBasedOnOperatorById", para);
 
-        public static DataTable GetPatientsBasedOnOpereator(string operatorName)
-        {
-            SqlParameter para = new SqlParameter("@operatorName", SqlDbType.NVarChar, 50);
-            para.Value = operatorName;
-            return SqlHandler.QueryDataTable("GetPatientsBasedOnOperatorByName", para);
+        //}
 
-        }
+        //public static DataTable GetPatientsBasedOnOpereator(string operatorName)
+        //{
+        //    SqlParameter para = new SqlParameter("@operatorName", SqlDbType.NVarChar, 50);
+        //    para.Value = operatorName;
+        //    return SqlHandler.QueryDataTable("GetPatientsBasedOnOperatorByName", para);
+
+        //}
 
 
         //public static string globalConnectionString;

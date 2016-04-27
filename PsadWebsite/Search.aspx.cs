@@ -17,6 +17,7 @@ namespace PsadWebsite
 {
     public partial class Search : Page
     {
+       
         private void BindToRepeater(Repeater repeater, DataTable table)
         {
             repeater.DataSource = table;
@@ -36,8 +37,11 @@ namespace PsadWebsite
         {
             Label label = (Label)item.FindControl(id);
             //string gender = Eval("gender").ToString();
-            string css = " " + label.Text.ToLower();
-            label.CssClass += css;
+            if (label != null)
+            {
+                string css = " " + label.Text.ToLower();
+                label.CssClass += css;
+            }
         }
 
         private void RepeaterCss(Repeater repeater)
@@ -49,100 +53,223 @@ namespace PsadWebsite
             }
         }
 
-        
+        private void CreateRadioButtons()
+        {
+            //RadioButton patients = new RadioButton();
+            //patients.Text = "Patients";
+            //patients.Attributes["value"] = "" + (int)Data.Patients;
+            //patients.Attributes.Add("data-toggle");
+              
+            //PanelGender.Controls.Add(patients);
+
+        }
 
         #region If Enums Are Used
-        private string GetGenderName(Gender gender)
+        private string GetGenderName(EGender gender)
         {
-            if (gender == Gender.Male)
+            if (gender == EGender.Male)
                 return "Male";
             else
                 return "Female";
         }
 
         // This would be unnessesary if db contained fk that correspond to the enums
-        private Gender DetermineGender(string gender)
+        private EGender DetermineGender(string gender)
         {
             if (gender == "male")
-                return Gender.Male;
-            else return Gender.Female;
+                return EGender.Male;
+            else return EGender.Female;
         }
         #endregion
 
         private void FindPeople(string query)
         {
-            SqlParameter para1 = new SqlParameter("@name", SqlDbType.NVarChar, 50);
-            SqlParameter para2 = new SqlParameter("@name", SqlDbType.NVarChar, 50);
-            SqlParameter para3 = new SqlParameter("@name", SqlDbType.NVarChar, 50);
-
-            para1.Value = query;
-            para2.Value = query;
-            para3.Value = query;
-
             DataTable patients, operators, organisations;
 
-            patients = SqlHandler.QueryDataTable("GetPatientsByName", para1);
-            operators = SqlHandler.QueryDataTable("GetOperatorsByName", para2);
-            organisations = SqlHandler.QueryDataTable("GetOrganisationsByName", para3);
+            patients = SearchHandler.FindPeople(query, EData.Patients);
+            operators = SearchHandler.FindPeople(query, EData.Operators);
+            organisations = SearchHandler.FindPeople(query, EData.Organisations);
 
             ShowIfNotEmpty(PanelPatients, patients);
-            //ShowIfNotEmpty(RepeaterOperators, operators);
-            //ShowIfNotEmpty(RepeaterOrganisations, organisations);
+            ShowIfNotEmpty(PanelOperators, operators);
+            ShowIfNotEmpty(PanelOrganisations, organisations);
 
             BindToRepeater(RepeaterPatients, patients);
             BindToRepeater(RepeaterOperators, operators);
             BindToRepeater(RepeaterOrganisations, organisations);
+
             // This will be done differently if enums are used
             // Binding multple tables to the repeater, or changeing the architecture of the table
             // Or perhaps just reading as rows and parsing values respectively
             RepeaterCss(RepeaterPatients);
+            RepeaterCss(RepeaterOperators);
+            RepeaterCss(RepeaterOrganisations);
+
         }
 
+        private void FindPeople(string query, EData group)
+        {
+            DataTable table = SearchHandler.FindPeople(query, group);
+
+            switch (group)
+            {
+                case EData.Patients:
+                    ShowIfNotEmpty(PanelPatients, table);
+                    BindToRepeater(RepeaterPatients, table);
+                    RepeaterCss(RepeaterPatients);
+
+                    break;
+                case EData.Operators:
+                    ShowIfNotEmpty(PanelOperators, table);
+                    BindToRepeater(RepeaterOperators, table);
+                    RepeaterCss(RepeaterOperators);
+                    break;
+                case EData.Organisations:
+                    ShowIfNotEmpty(PanelOrganisations, table);
+                    BindToRepeater(RepeaterOrganisations, table);
+                    RepeaterCss(RepeaterOrganisations);
+                    break;
+            }
+
+            // This will be done differently if enums are used
+            // Binding multple tables to the repeater, or changeing the architecture of the table
+            // Or perhaps just reading as rows and parsing values respectively
+        }
+
+        private void FindPeople(string query, EData group, EGender gender)
+        {
+            DataTable table = SearchHandler.FindPeople(query, group, gender);
+
+            switch (group)
+            {
+                case EData.Patients:
+                    ShowIfNotEmpty(PanelPatients, table);
+                    BindToRepeater(RepeaterPatients, table);
+                    RepeaterCss(RepeaterPatients);
+
+                    break;
+                case EData.Operators:
+                    ShowIfNotEmpty(PanelPatients, table);
+                    BindToRepeater(RepeaterOperators, table);
+                    RepeaterCss(RepeaterOperators);
+                    break;
+            }
+
+            // This will be done differently if enums are used
+            // Binding multple tables to the repeater, or changeing the architecture of the table
+            // Or perhaps just reading as rows and parsing values respectively
+        }
 
         protected void Page_Load(object sender, EventArgs e)
         {
             NameValueCollection qs = Page.Request.QueryString;
             //DataTable dt = null;
-            bool advanced = false;
+            bool advanced = true;
+            EData group = 0;
+            EGender gender = 0;
 
 
             if (qs.Count > 0)
             {
                 string query = null;
 
-                if (qs[SearchHandler.Q] != null)
+                if (qs[SearchHandler.Query] != null)
                 {
-                    query = qs[SearchHandler.Q];
-                }
+                    query = qs[SearchHandler.Query];
 
+                    if (qs[SearchHandler.Group] != null)
+                    {
+                        Enum.TryParse(qs[SearchHandler.Group], out group);
+                        //alternative
+                        //group = (EData)Enum.Parse(typeof(EData), qs[SearchHandler.Group]);
+                    }
+                    if (qs[SearchHandler.Gender] != null)
+                    {
+                        Enum.TryParse(qs[SearchHandler.Gender], out gender);
+                    }
 
-                if (advanced)
-                {
+                    if (group > 0)
+                    {
 
-                }
-                else
-                {
-                    FindPeople(query);
+                        if (gender > 0)
+                        {
+                            // search in specific group and after specific gender
+                            FindPeople(query, group, gender);
+                        }
+                        else
+                        {
+                            //Search in specific group
+                            FindPeople(query, group);
+                        }
+                    }
+                    else
+                    {
+                        FindPeople(query);
+                    }
                 }
             }
-        }
+            //foreach (ListItem item in RadioButtonListGroup.Items)
+            //{
+            //    item.Attributes[]
+            //}
 
-        
+
+            CreateRadioButtons();
+            //control..Attributes.Add("data-toggle", "collapse");
+            //control.Attributes.Add("data-target", "#advancedGender");
+
+
+            //RadioButton checkedButton = PanelGender.Controls.OfType<RadioButton>().FirstOrDefault(r => r.Checked);
+            //checkedButton.Attributes["value"].
+        }
 
         protected void ButtonSearch_Click(object sender, EventArgs e)
         {
             string search = TextBoxSearch.Text;
+            string searchPage = SiteMaster.SearchpageLink;
+            List<string> queryParameters = new List<string>();
+            string queryRedirect;
 
             if (search != string.Empty)
             {
-                Response.Redirect(SearchHandler.QueryString(SiteMaster.SearchpageLink, search));
+                int group;
+                int.TryParse(RadioButtonListGroup.SelectedValue, out group);
+
+                int gender;
+                int.TryParse(RadioButtonListGender.SelectedValue, out gender);
+
+                if (group > 0)
+                {
+                    queryParameters.Add(SearchHandler.Group + SearchHandler.Delimiter + group);
+                }
+
+                if (gender > 0)
+                {
+                    queryParameters.Add(SearchHandler.Gender + SearchHandler.Delimiter + gender);
+                }
+
+                queryRedirect = SearchHandler.QueryString(searchPage, search, queryParameters.ToArray());
+                Response.Redirect(queryRedirect);
             }
             else
             {
-                Response.Redirect(SiteMaster.SearchpageLink);
+                Response.Redirect(searchPage);
             }
             //Text
             //GetPatient(); //.... lots of different simples queries for that small stuff
+        }
+
+        protected void RadioButtonListGroup_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            //// show gender choice if patients or operators
+            //int group;
+            //int.TryParse(RadioButtonListGroup.SelectedValue, out group);
+            //if (group > 0)
+            //{
+
+            //}
+
+            //always show status
         }
     }
 }

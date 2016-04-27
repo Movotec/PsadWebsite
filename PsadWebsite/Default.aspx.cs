@@ -19,7 +19,7 @@ namespace PsadWebsite
         protected void Page_Load(object sender, EventArgs e)
         {
 
-            DataTable datatable = SearchHandler.GetPatientsBasedOnOpereator("Johan");
+            //DataTable datatable = SearchHandler.GetPatientsBasedOnOpereator("Johan");
 
             //SqlCommand cmd = new SqlCommand();
             //SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["EIPsad"].ConnectionString);
