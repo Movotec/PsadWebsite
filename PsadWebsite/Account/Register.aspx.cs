@@ -14,6 +14,7 @@ using System.ComponentModel;
 using System.Web.Services.Description;
 using System.Security.Policy;
 using PsadWebsite.App_Code;
+using System.Threading.Tasks;
 
 namespace PsadWebsite.Account
 {
@@ -23,13 +24,14 @@ namespace PsadWebsite.Account
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            // Autofill email field
             if (!Page.IsCallback)
             Email.Text = "cmeisterham@gmail.com";
             //Password.Text = "asd";
             //ConfirmPassword.Text = "asd";
 
             // Only access is authenticed admin
-            if (!HttpContext.Current.User.IsInRole("Admin") || !HttpContext.Current.User.Identity.IsAuthenticated )
+            if (!HttpContext.Current.User.IsInRole("Admin") || !HttpContext.Current.User.Identity.IsAuthenticated)
             {
                 Response.Redirect(SiteMaster.HomepageLink);
             }            
@@ -41,7 +43,7 @@ namespace PsadWebsite.Account
         protected void CreateUser_Click(object sender, EventArgs e)
         {
             // Password Generation
-            string password = Membership.GeneratePassword(8, 0) + new Random().Next(1000,9999);
+            string password = Membership.GeneratePassword(12, 0) + new Random().Next(1000,9999);
             // Perhaps first send the password after the email has been verified...
 
             var manager = Context.GetOwinContext().GetUserManager<ApplicationUserManager>();
@@ -55,7 +57,20 @@ namespace PsadWebsite.Account
             if (result.Succeeded)
             {
                 // Send verification email to newly created user
-                GenericEmail.VerifyAccount(manager, user, password, Request);
+                Task verify = GenericEmail.VerifyAccount(manager, user, password, Request);
+
+                if (verify.IsCanceled)
+                {
+                    ErrorMessage.Text = "Cancelled sending mail";
+                }
+                else if (verify.IsFaulted)
+                {
+                    ErrorMessage.Text = "Failed to send message";
+                }
+                else if (verify.IsCompleted)
+                {
+                    ErrorMessage.Text = "Message successfully sent";// + message.To + ", from " + message.From;
+                }
 
                 #region OLD NONFUNCTIONAL CODE
 

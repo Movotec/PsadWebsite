@@ -8,26 +8,48 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using Microsoft.AspNet.Identity;
 using PsadWebsite.App_Code;
+using System.IO;
 
 namespace PsadWebsite
 {
     public partial class SiteMaster : MasterPage
     {
         public const string siteName = "PSAD";
+        private const string scriptLink = "~/";
+        private const string prefix = "~/";
+        private const string ext = ".aspx";
         //public const string HomepageLink = "~/";
         //public const string SearchpageLink = "~/search.aspx";
         //public const string AboutpageLink = "~/about.aspx";
         //public const string ContactpageLink = "~/contact.aspx";
 
+        private static List<Link> links = new List<Link>
+        {
+            new Link("Home", "Default", prefix, ext),
+            new Link("Search", prefix, ext),
+            new Link("About", prefix, ext),
+            new Link("Contact", prefix, ext),
+        };
+
+        private static List<Link> adminLinks = new List<Link>
+        {
+            new Link("Register", prefix, ext),
+            new Link("Manage", prefix, ext),
+        };
 
         private static Dictionary<string, string> pageLinks = new Dictionary<string, string>()
         {
             { "Home", "~/" },
-            { "Search", "~/Search.aspx" },
-            { "About", "~/About.aspx" },
-            { "Contact",  "~/Contact.aspx" }
+            { "Search", "~/Search" },
+            { "About", "~/About" },
+            { "Contact",  "~/Contact" }
         };
 
+        private static Dictionary<string, string> adminLinks2 = new Dictionary<string, string>()
+        {
+            { "Register", "~/Account/Register" },
+            { "Manage", "~/Account/Manage" },
+        };
 
         private const string AntiXsrfTokenKey = "__AntiXsrfToken";
         private const string AntiXsrfUserNameKey = "__AntiXsrfUserName";
@@ -60,33 +82,29 @@ namespace PsadWebsite
 
         // Need a smart way to compare links, right now link from dictionary tries to compare against clean url, perhaps just compare against name
         // But that would fail if you rename it to danish
-        private bool IsCurrentPage(string url)
+        //private bool IsCurrentPage(string url)
+        //{
+        //    string name = Path.GetFileName(Request.Url.AbsolutePath);
+        
+
+
+        //    return boo;
+        //}
+
+        private string CurrentPage()
         {
-            //url = Page.ResolveClientUrl(url);
-
-            string name = Page.Request.Url.GetLeftPart(UriPartial.Path);
-            //name = name.TrimEnd('/');
-            bool boo = name.Equals(url);
-
-            //string fullurl
-            //Uri link = new Uri(url);
-            //string page = Page.Request.Url.GetLeftPart(UriPartial.Path);
-            //string urlstring = TrimLink(url);
-
-            //Uri pageUri = Page.Request.Url;///.GetLeftPart(UriPartial.Path);
-            //string uriBase = pageUri.Scheme + "/" + pageUri.Authority + "/";
-            //Uri uriUrl = new Uri(uriBase + url);
-            
-            //int boo = Uri.Compare(uriUrl, pageUri,UriComponents.Path, UriFormat.Unescaped, StringComparison.CurrentCulture);
-            return true;
+            return Path.GetFileName(Request.Url.AbsolutePath);
         }
 
-        private void SetCurrentPageAttributes(ListItem item, string css)
+        private void SetCurrentPageAttributes(ListItem item, Link link, string idPrefix, string css)
         {
-            item.Attributes.Add("ID", "HyperLink" + item.Text);
+            item.Attributes.Add("ID", idPrefix + link.Name);
 
-            if (IsCurrentPage(item.Value))
-                item.Attributes.Add("CssClass", css);
+            string curpage = CurrentPage();
+
+
+            if (link.Equals(CurrentPage()))
+                item.Attributes.Add("class", css);
 
         }
 
@@ -94,12 +112,30 @@ namespace PsadWebsite
         {
             BulletedListNavigation.DisplayMode = BulletedListDisplayMode.HyperLink;
 
-            foreach (KeyValuePair<string, string> item in pageLinks)
+            foreach (Link link in links)
             {
-                ListItem listItem = new ListItem(item.Key, item.Value);
-                SetCurrentPageAttributes(listItem, "current-page");
+                ListItem listItem = new ListItem(link.Name, link.FullLink);
+                SetCurrentPageAttributes(listItem, link, "HyperLink", "current-page");
                 BulletedListNavigation.Items.Add(listItem);
             }
+
+            //foreach (KeyValuePair<string, string> item in pageLinks)
+            //{
+            //    ListItem listItem = new ListItem(item.Key, item.Value);
+            //    SetCurrentPageAttributes(listItem, "current-page");
+            //    BulletedListNavigation.Items.Add(listItem);
+            //}
+
+            //if (HttpContext.Current.User.Identity.IsAuthenticated && HttpContext.Current.User.IsInRole("Admin"))
+            //{
+            //    foreach (KeyValuePair<string, string> item in adminLinks)
+            //    {
+            //        ListItem listItem = new ListItem(item.Key, item.Value);
+            //        SetCurrentPageAttributes(listItem, "current-page");
+            //        BulletedListNavigation.Items.Add(listItem);
+            //    }
+            //}
+
 
         }
 

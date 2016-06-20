@@ -11,7 +11,7 @@ namespace PsadWebsite.App_Code
 {
     public class GenericEmail
     {
-        public static void VerifyAccount(ApplicationUserManager manager, ApplicationUser user, string password, HttpRequest request)
+        public static Task VerifyAccount(ApplicationUserManager manager, ApplicationUser user, string password, HttpRequest request)
         {
             string currentUrl = "http://localhost:50196/";
             string verificationPage = "Account/Confirm.aspx"; // The confirmation page gives an error when trying to verify
@@ -24,11 +24,13 @@ namespace PsadWebsite.App_Code
             string body = string.Format(@"You will first be able to use your account it when you have verified it.<br/>
                 Please verify your account via <a href='{0}'>link</a><br/>
                 Or copy the url to a browser address bar: {0}<br/>
-                <br/> Your password is <b>{1}</b>",
+                <br/> Your password is 
+                <br/><b>{1}</b>",
                 callbackUrl, password);
 
             // The task stops if i put await on any scope of the method, it runs without it but i does not seeem to send the email.
-            manager.SendEmailAsync(user.Id, subject, body);
+            Task task = manager.SendEmailAsync(user.Id, subject, body);
+            return task;
         }
     }
 }
