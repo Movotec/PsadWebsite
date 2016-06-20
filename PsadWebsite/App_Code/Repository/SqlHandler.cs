@@ -10,19 +10,28 @@ namespace PsadWebsite.App_Code.Repository
 {
     public static class SqlHandler
     {
-        private static string connectionString = ConfigurationManager.ConnectionStrings["PsadData"].ConnectionString;
+        //private static string ConnectionString; // = ConfigurationManager.ConnectionStrings["PsadData"].ConnectionString;
+        private static string configConnectionString;// = "PsadData";
 
 
         public static string ConnectionString
         {
             get
             {
-                return connectionString;
+                return ConfigurationManager.ConnectionStrings[ConfigConnectionString].ConnectionString;
+            }
+        }
+
+        public static string ConfigConnectionString
+        {
+            get
+            {
+                return configConnectionString;
             }
 
             set
             {
-                connectionString = value;
+                configConnectionString = value;
             }
         }
 
@@ -30,7 +39,7 @@ namespace PsadWebsite.App_Code.Repository
         {
             try
             {
-                using (SqlBulkCopy bulk = new SqlBulkCopy(connectionString, SqlBulkCopyOptions.KeepNulls))
+                using (SqlBulkCopy bulk = new SqlBulkCopy(ConnectionString, SqlBulkCopyOptions.KeepNulls))
                 {
                     foreach (DataColumn col in dataTable.Columns)
                     {
@@ -53,7 +62,7 @@ namespace PsadWebsite.App_Code.Repository
 
         public static void ExecuteNonQuery(string commandtext, bool storedProcedure = false)
         {
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlConnection conn = new SqlConnection(ConnectionString))
             {
                 using (SqlCommand cmd = new SqlCommand(commandtext, conn))
                 {
@@ -70,7 +79,7 @@ namespace PsadWebsite.App_Code.Repository
 
         public static DataTable QueryDataTable(string commmandtext)
         {
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlConnection conn = new SqlConnection(ConnectionString))
             {
                 using (SqlCommand cmd = new SqlCommand(commmandtext, conn))
                 {
@@ -104,7 +113,7 @@ namespace PsadWebsite.App_Code.Repository
 
         public static DataTable QueryDataTable(string commmandtext, params SqlParameter[] parameters)
         {
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlConnection conn = new SqlConnection(ConnectionString))
             {
                 using (SqlCommand cmd = new SqlCommand(commmandtext, conn))
                 {

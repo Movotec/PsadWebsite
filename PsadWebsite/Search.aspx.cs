@@ -1,4 +1,5 @@
-﻿using PsadWebsite.App_Code;
+﻿using Microsoft.AspNet.Identity.Owin;
+using PsadWebsite.App_Code;
 using PsadWebsite.App_Code.Repository;
 using System;
 using System.Collections.Generic;
@@ -162,11 +163,18 @@ namespace PsadWebsite
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            SqlHandler.ConfigConnectionString = "PsadData";
+
             NameValueCollection qs = Page.Request.QueryString;
             //DataTable dt = null;
             bool advanced = true;
             EData group = 0;
             EGender gender = 0;
+
+            if (!HttpContext.Current.User.Identity.IsAuthenticated)// && Context.GetOwinContext().GetUserManager<ApplicationUserManager>().Find)
+            {
+                Response.Redirect(SiteMaster.HomepageLink);
+            }
 
 
             if (qs.Count > 0)

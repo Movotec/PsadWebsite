@@ -7,15 +7,72 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using PsadWebsite.Models;
+using System.Net.Mail;
+using System.Net;
+using System.Text;
+using System.Web;
+using System.Configuration;
+using System.Web.Configuration;
+using System.Net.Configuration;
 
 namespace PsadWebsite
 {
+    //public class EmailService : IIdentityMessageService
+    //{
+    //    public Task SendAsync(IdentityMessage message)
+    //    {
+    //        // Plug in your email service here to send an email.
+    //        return Task.FromResult(0);
+    //    }
+
+    //    internal void SendAsync(object indetityMessage)
+    //    {
+    //        throw new NotImplementedException();
+    //    }
+    //}
+
+    // This is a overide of EmailService wich can and is in my case inteded to be used for email verification
+    // It is still unclear how this would be called, it seems that i have to access/write/overwrite code in the identity framework to be able to access it
+
+        // It is called via an instance of ApplicationUserManager, where user.Id is supplied as an IdentityMessage containing subject and body
+        //This is specifically used for account verification, but technically this could be made more generically for sending emails and the context should be created
+        //outside in the corresponding page. Ergo: Register.aspx should contain all the context for the email where as this "Task" should simply be sending the email
     public class EmailService : IIdentityMessageService
     {
-        public Task SendAsync(IdentityMessage message)
+        public async Task SendAsync(IdentityMessage message)
         {
-            // Plug in your email service here to send an email.
-            return Task.FromResult(0);
+            // Alertinative
+            //ConfigurationManager.AppSettings["emailServiceUserName"],
+            //     ConfigurationManager.AppSettings["emailServicePassword"]
+            Configuration config = WebConfigurationManager.OpenWebConfiguration(HttpContext.Current.Request.ApplicationPath);
+            MailSettingsSectionGroup group = (MailSettingsSectionGroup)config.GetSectionGroup("system.net/mailSettings");
+            SmtpSection smtp = group.Smtp;
+
+            // All sender email values are stored in web.config under system.net -> mailSettings
+            string office = smtp.Network.Host;
+            string clientEmail = smtp.Network.UserName; // smpt.From alterativly
+            string clientPass = smtp.Network.Password;
+            int port = smtp.Network.Port;
+            //string text = string.Format("Please clock on this link to {0}: {1}", message.Subject, message.Body);
+            //string html = "Please confirm your account by clicking this link: <a href='" + message.Body + "'>link</a><br/>";
+
+            //html += HttpUtility.HtmlEncode(@"Or copy the following link to your browser: " + message.Body);
+
+        MailMessage msg = new MailMessage(clientEmail, message.Destination, message.Subject, message.Body);
+            msg.IsBodyHtml = true;
+            msg.SubjectEncoding = Encoding.UTF8;
+            msg.BodyEncoding = Encoding.UTF8;
+
+            using (SmtpClient client = new SmtpClient(office, port))
+            {
+                client.EnableSsl = true;
+                client.Credentials = new NetworkCredential(clientEmail, clientPass);
+
+                //client.SendCompleted += new SendCompletedEventHandler(SendCompletedCallback);
+
+                await client.SendMailAsync(msg); //SendAsync();        
+            }
+
         }
     }
 
@@ -49,10 +106,10 @@ namespace PsadWebsite
             // Configure validation logic for passwords
             manager.PasswordValidator = new PasswordValidator
             {
-                RequiredLength = 6,
-                RequireNonLetterOrDigit = true,
+                RequiredLength = 8,
+                RequireNonLetterOrDigit = false,
                 RequireDigit = true,
-                RequireLowercase = true,
+                RequireLowercase = false,
                 RequireUppercase = true,
             };
 

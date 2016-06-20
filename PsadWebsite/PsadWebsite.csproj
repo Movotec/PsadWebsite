@@ -193,6 +193,7 @@
     </Content>
     <Content Include="Account\AddPhoneNumber.aspx" />
     <Content Include="Account\Confirm.aspx" />
+    <Content Include="Account\CutPasswordFields.html" />
     <Content Include="Account\Forgot.aspx" />
     <Content Include="Account\Lockout.aspx" />
     <Content Include="Account\Login.aspx" />
@@ -224,6 +225,8 @@
     <Content Include="Data\Operators\dummy.txt" />
     <Content Include="Data\Organisations\dummy.txt" />
     <Content Include="Data\Patients\dummy.txt" />
+    <Content Include="Email\NewUserEmail.aspx" />
+    <Content Include="Email\NewUserEmail.html" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
@@ -399,6 +402,7 @@
     <Compile Include="Account\VerifyPhoneNumber.aspx.designer.cs">
       <DependentUpon>VerifyPhoneNumber.aspx</DependentUpon>
     </Compile>
+    <Compile Include="App_Code\GenericEmail.cs" />
     <Compile Include="App_Code\EnitityModels\MeasurementData.cs" />
     <Compile Include="App_Code\EnitityModels\Measurements.cs" />
     <Compile Include="App_Code\EnitityModels\Operators.cs" />
@@ -444,6 +448,13 @@
     </Compile>
     <Compile Include="Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Email\NewUserEmail.aspx.cs">
+      <DependentUpon>NewUserEmail.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Email\NewUserEmail.aspx.designer.cs">
+      <DependentUpon>NewUserEmail.aspx</DependentUpon>
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
