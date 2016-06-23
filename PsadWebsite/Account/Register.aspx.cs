@@ -35,9 +35,12 @@ namespace PsadWebsite.Account
             {
                 Response.Redirect(SiteMaster.HomepageLink);
             }            
+
+            if (Request.QueryString["email"] != null)
+            {
+                Email.Text = Request.QueryString["email"];
+            }
         }
-
-
 
 
         protected void CreateUser_Click(object sender, EventArgs e)

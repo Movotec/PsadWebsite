@@ -18,12 +18,13 @@ namespace PsadWebsite
         private const string scriptLink = "~/";
         private const string prefix = "~/";
         private const string ext = ".aspx";
+        private const string accountDir = "account/";
         //public const string HomepageLink = "~/";
         //public const string SearchpageLink = "~/search.aspx";
         //public const string AboutpageLink = "~/about.aspx";
         //public const string ContactpageLink = "~/contact.aspx";
 
-        private static List<Link> links = new List<Link>
+        public static List<Link> links = new List<Link>
         {
             new Link("Home", "Default", prefix, ext),
             new Link("Search", prefix, ext),
@@ -31,10 +32,10 @@ namespace PsadWebsite
             new Link("Contact", prefix, ext),
         };
 
-        private static List<Link> adminLinks = new List<Link>
+        public static List<Link> adminLinks = new List<Link>
         {
-            new Link("Register", prefix, ext),
-            new Link("Manage", prefix, ext),
+            new Link("Register", prefix + accountDir, ext),
+            new Link("Manage", prefix + accountDir, ext),
         };
 
         private static Dictionary<string, string> pageLinks = new Dictionary<string, string>()
@@ -117,6 +118,16 @@ namespace PsadWebsite
                 ListItem listItem = new ListItem(link.Name, link.FullLink);
                 SetCurrentPageAttributes(listItem, link, "HyperLink", "current-page");
                 BulletedListNavigation.Items.Add(listItem);
+            }
+
+            if (HttpContext.Current.User.Identity.IsAuthenticated && HttpContext.Current.User.IsInRole("Admin"))
+            {
+                foreach (Link link in adminLinks)
+                {
+                    ListItem listItem = new ListItem(link.Name, link.FullLink);
+                    SetCurrentPageAttributes(listItem, link,"HyperLink", "current-page");
+                    BulletedListNavigation.Items.Add(listItem);
+                }
             }
 
             //foreach (KeyValuePair<string, string> item in pageLinks)

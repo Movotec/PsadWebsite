@@ -58,7 +58,7 @@ namespace PsadWebsite
 
             //html += HttpUtility.HtmlEncode(@"Or copy the following link to your browser: " + message.Body);
 
-        MailMessage msg = new MailMessage(clientEmail, message.Destination, message.Subject, message.Body);
+            MailMessage msg = new MailMessage(clientEmail, message.Destination, message.Subject, message.Body);
             msg.IsBodyHtml = true;
             msg.SubjectEncoding = Encoding.UTF8;
             msg.BodyEncoding = Encoding.UTF8;
